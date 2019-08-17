@@ -1,0 +1,36 @@
+\subsection{actual coordinate transformation example}
+
+Let's take a small example to demonstrate the coordinate transformation.
+
+\noindent  \textbf{example} \quad  \emph{The radish No. 1 and the radish No. 2 are located in the world coordinate system. Hutchison world coordinate system for the $ W $ , radishes's coordinate system $ R_ 1 $ and $ R_ 2 $ . The position of the radish No. 1 is $ \bm {q}_ 1 = [ 0.35 , 0.2 , 0.3 , 0.1 ]^ \mathrm{T}, \bm{t}_ 1 = [ 0.3 , 0.1 , 0.1 ]^ \mathrm{T} $ . The position of the radish No. 2 is $ \bm{q}_2 = [ - 0.5 , 0.4 , - 0.1 , 0.2 ]^ \mathrm{T}, \bm{t}_ 2 = [- 0.1 , 0.5 , 0.3 ]^ \mathrm{T} $ . Here $ \bm {q} $ and $ \bm{t} $ express $ \bm{T}_{R_k, W}, k= 1 , 2 $ , which is the world coordinate system to the camera coordinate system. Transform the relationship. Now, Little Radish No. 1 sees a point in its own coordinate system with coordinates of $ \bm{p}_{R_1} = [ 0.5 .0 , 0.2 ]^ \mathrm{T} $ , find the coordinates of the vector in the radish No. 2 coordinate system. }
+
+This is a very simple but representative example. In actual scenarios you often need to convert coordinates between different parts of the same robot or between different robots. Below we write a program to demonstrate this calculation.
+
+\begin{lstlisting}[language=c++,caption=slambook2/ch3/examples/coordinateTransform.cpp]
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<Eigen/Core>
+#include<Eigen/Geometry>
+
+using namespace std;
+using namespace Eigen;
+
+int main(int argc, char** argv) {
+    Quaterniond q1(0.35, 0.2, 0.3, 0.1), q2(-0.5, 0.4, -0.1, 0.2);
+    q1.normalize();
+    q2.normalize();
+    Vector3d t1(0.3, 0.1, 0.1), t2(-0.1, 0.5, 0.3);
+    Vector3d p1(0.5, 0, 0.2);
+    
+    Isometry3d T1w(q1), T2w(q2);
+    T1w.pretranslate (t1);
+    T2w.pretranslate (t2);
+    
+    Vector3d p2 = T2w * T1w.inverse() * p1;
+    cout << endl << p2.transpose() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+The answer to the program output is $ [- 0.0309731 , 0.73499 , 0.296108 ]^ \mathrm{T} $ , and the calculation process is very simple, just calculate $$ \bm{p}_{R_2} = \bm{T}_{ R_2, W} \bm{T}_{W, R_1} \bm{p}_{R_1} $$ . Note that the quaternion needs to be normalized before use.

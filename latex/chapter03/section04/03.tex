@@ -1,0 +1,15 @@
+\subsection{Use quaternion to represent rotation}
+
+We can use a quaternion to express the rotation of a point. Suppose a spatial 3D point $ \bm {p} = [x,y,z] \in  \mathbb {R}^ 3 $ , and a rotation specified by the unit quaternion $ \bm {q} $ . The 3D point $ \bm {p} $ is rotated to become $ \bm {p}' $ . If you use a matrix description, then there is $ \bm {p}'= \bm {R} \bm {p} $ . And if you use quaternions to describe rotation, how do they relate to their relationship?
+
+First, describe the 3D space point with a virtual quaternion:
+\[
+\bm{p} = [0, x, y, z]^\mathrm{T} = [0, \bm{v}]^\mathrm{T}. 
+\]
+This is equivalent to matching the three imaginary parts of the quaternion with the three axes in the space. Then, the rotated point $ \bm {p}' $ can be expressed as such a product:
+
+\begin{equation}\label{eq:rotate-with-quaternion}
+\bm{p}' = \bm{q} \bm{p} \bm{q}^{-1}.
+\end{equation}
+
+The multiplication here is quaternion multiplication, and the result is also a quaternion. Finally, take the imaginary part of $ \bm{p}' $ and get the coordinates of the point after the rotation. Moreover, it can be verified (reserved as an exercise), and the real part of the calculation result is 0, so it is a pure virtual quaternion.

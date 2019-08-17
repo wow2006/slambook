@@ -1,0 +1,218 @@
+\subsection{conversion of quaternions to other rotation representations}
+
+An arbitrary unit quaternion describes a rotation, which can also be described by a rotation matrix or a rotation vector. Now let's examine the conversion relationship between quaternions and rotation vectors and rotation matrices. Before that, we have to say that quaternion multiplication can also be written as a matrix multiplication. Let $ \bm {q}=[s, \bm {v}]^ \mathrm {T} $ , then define the following symbols $ ^{+} $ and $ ^{ \oplus } $ for \textsuperscript { \ auf cite {}} Barfoot2011:
+
+\begin{equation}
+\bm{q}^{+}=\left[\begin{array}{cc}
+s&-\bm{v}^\mathrm{T} \\
+\bm{v}&s\bm{I}+\bm{v}^{\wedge}
+\end{array}\right],\quad 
+\bm{q}^{\oplus}=
+\left[\begin{array}{cc}
+s & -\bm{v}^\mathrm{T} \\
+\bm{v} & s\bm{I}-\bm{v}^{\wedge}
+\end{array}\right],
+\end{equation}
+
+These two symbols map the quaternion to a matrix of 4 $ \times $ 4 . Then quaternion multiplication can be written in the form of a matrix:
+
+\begin{equation}
+\bm{q}_1^ + {\bm{q}_2} = \left[ {\begin{array}{*{20}{c}}
+	s_1&-\bm{v}_1^T\\
+	\bm{v}_1 & s_1 \bm{I} + \bm{v}_1^\wedge
+	\end{array}} \right]\left[ {\begin{array}{*{20}{c}}
+	{{s _2}} \\
+	{{ \bm {v} _2}}
+	\end{array}} \right] = \left[ {\begin{array}{*{20}{c}}
+	{- \bm{v} _1 ^ T { \bm{v} _2} + {s _1} {s _2}} \\ 
+	{{s _1} { \bm{v} _2} + {s _2} { \bm{v} _1} + \bm{v} _1 ^ \wedge { \bm {v} _2}}
+	\end{array}} \right] = \bm{q}_1 \bm{q}_2
+\end{equation}
+
+The same can also be proved:
+\begin{equation}
+\bm{q}_1 \bm{q}_2 = \bm{q}_1^{+} \bm{q}_2 = \bm{q}_2^{\oplus} \bm{q}_1.
+\end{equation}
+
+Then, consider the problem of using a quaternion to rotate a spatial point. According to the previous statement, there are:
+
+\begin{equation}
+\begin{split}
+\bm{p}' &= \bm{q} \bm{p} \bm{q}^{-1} = \bm{q}^+ \bm{p}^+ \bm{q}^{-1} \\
+&= \bm{q}^+ \bm{q}^{{-1}^{\oplus}} \bm{p}.
+\end{split}
+\end{equation}
+
+Substituting the matrix corresponding to two symbols, you get:
+
+\begin{equation}\label{eq:quaternion-to-rotation-matrix-derive}
+{\bm{q}^ + }{\left( {{\bm{q}^{ - 1}}} \right)^ \oplus } = \left[ \begin{array}{*{20}{c}}
+	s&-\bm{v}^T\\
+	\bm{v}&s\bm{I}+\bm{v}^\wedge 
+	\end{array} \right]\left[\begin{array}{*{20}{c}}
+	s&{\bm{v} ^T}\\
+	{ - \bm{v} }&{s\bm{I} + \bm{v} ^ \wedge }
+	\end{array} \right] = \left[ \begin{array}{*{20}{c}}
+	1&\bm{0} \\
+	\bm{0}^\mathrm{T}&\bm{v}\bm{v}^\mathrm{T} + {s^2} \bm{I} + 2s\bm{v} ^ \wedge + {(\bm{v} ^ \wedge)}^2 
+	\end{array} \right].
+\end{equation}
+
+Since $ \bm{p}' $ and $ \bm{p} $ are both virtual quaternions, the fact that the bottom right corner of the matrix gives the transformation of \textbf{from quaternion to rotation matrix}:
+
+\begin{equation}
+\bm{R} = \bm{v} \bm{v}^\mathrm{T} + {s^2} \bm{I} + 2s\bm{v} ^ \wedge + {(\bm{v} ^ \wedge)}^2.
+\end{equation}
+
+In order to obtain the conversion formula of the quaternion to the rotation vector, the two sides of the above formula are traced to obtain:
+
+\begin{equation}
+\begin{aligned}
+\mathrm{tr}(\bm{R}) &= \mathrm{tr}(\bm{v}\bm{v}^\mathrm{T} + 3s^2 + 2s \cdot 0 + \mathrm{tr}((\bm{v}^\wedge)^2) \\
+& = v_1 ^ 2 + v_2 ^ 2 + v_3s ^ 2 + 3s ^ 2 - 2 (v_1 ^ 2 + v_2 ^ 2 + v_3 ^ 2) \\
+&= (1-s^2) + 3s^2 -2(1-s^2)\\
+&= 4s^2 -1.
+\end{aligned}
+\end{equation}
+
+Also obtained by the formula \eqref{eq:R2theta}:
+
+\begin{equation}
+\begin{aligned}
+\theta &= \arccos(\frac{\mathrm{tr}(\bm{R}-1)}{2}) \\
+&=\arccos(2s^2-1).
+\end{aligned}
+\end{equation}
+
+which is
+
+\begin{equation}
+\cos \theta =2s^2-1=2 \cos^2 \frac{\theta}{2} -1,
+\end{equation}
+
+and so:
+
+\begin{equation}
+\theta = 2 \arccos s.
+\end{equation}
+
+As the rotary shaft, if the formula \eqref{EQ: Quaternion-to-rotation-Matrix-Derive} by $ \bm{Q} $ imaginary portion instead of $ \bm{P} $ , easy to know $ \bm{Q} The vector of the imaginary part of $ is not moving when it is rotated, that is, it constitutes the rotation axis. So just remove it from its modulus, you get it. In summary, the conversion formula for quaternion to rotation vector can be written as follows:
+
+\begin{equation}
+\label{eq:rotationVector2Quaternion}
+\begin{cases}
+\theta  = 2\arccos {q_0}\\
+{\left[ {{n_x},{n_y},{n_z}} \right]^\mathrm{T}} = {{{\left[ {{q_1},{q_2},{q_3}} \right]}^\mathrm{T}}}/{\sin \frac{\theta }{2}}
+\end{cases} .
+\end{equation}
+
+As for how to switch from other methods to quaternions, you only need to reverse the above steps. In actual programming, the library usually prepares for the conversion between various forms for us. Whether it's a quaternion, a rotation matrix, or a shaft angle, they can all be used to describe the same rotation. We should choose the most convenient form in practice without having to stick to a particular form. In the subsequent practices and exercises, we will demonstrate the transition between various expressions to deepen the reader's impression.
+
+
+The conversion of % from a rotation vector to a quaternion is given in the formula \eqref{eq:rotationVector2Quaternion}. So now it seems that the most intuitive way to convert a quaternion to a matrix is ​​to convert the quaternion $\bm{q}$ to the axis angles $\theta$ and $\bm{n}$, and then The Rodriguez formula is converted into a matrix. However, it is more expensive to calculate a $\arccos$ function. In fact, this calculation can be bypassed by certain techniques. The derivation process is omitted here, and the conversion method of quaternion to rotation matrix is ​​directly given.
+%
+What is the relationship between % expression and rotation matrix and rotation vector? Let us first look at the rotation vector. Suppose a rotation is a rotation around the unit vector $\bm{n}=\left[ n_x, n_y, n_z \right]^\mathrm{T}$ with an angle of $\theta$, then the rotation of the quaternion The number is
+%\begin{equation}
+%\label{eq:ntheta2quaternion}
+%\bm{q} = \left[ \cos \frac{\theta}{2}, n_x \sin \frac{\theta}{2}, n_y \sin \frac{\theta}{2}, n_z \sin \frac{\theta}{2}\right]^\mathrm{T} .
+%\end{equation}
+%
+%, on the other hand, the corresponding rotation axis and angle can also be calculated from the unit quaternion:
+%
+%
+The % formula gives us a subtle "turning half" feeling. Similarly, for $\theta$ of the form \eqref{eq:ntheta2quaternion} plus $2\pi$, we get the same rotation, but the corresponding quaternion becomes $-\bm{q}$. Therefore, in quaternions, \textbf{arbitrary rotation can be represented by two quaternions that are opposite to each other}. Similarly, taking $\theta$ as $0$ results in a real quaternion without any rotation:
+%\begin{equation}
+%\bm{q}_0 = \left[ { \pm 1,0,0,0} \right]^\mathrm{T} .
+%\end{equation}
+%
+% sets the quaternion $\bm{q} = q_0+q_1i+q_2j+q_3k$, and the corresponding rotation matrix $\bm{R}$ is
+%\begin{equation}
+%\bm{R} = \left[ {\begin{array}{*{20}{c}}
+%	 {1 - 2q_2^2 - 2q_3^2}&{2{q_1}{q_2} - 2{q_0}{q_3}}&{2{q_1}{q_3} + 2{q_0}{q_2}}\\
+%	 {2{q_1}{q_2} + 2{q_0}{q_3}}&{1 - 2q_1^2 - 2q_3^2}&{2{q_2}{q_3} - 2{q_0}{q_1}}\\
+%	 {2{q_1}{q_3} - 2{q_0}{q_2}}&{2{q_2}{q_3} + 2{q_0}{q_1}}&{1 - 2q_1^2 - 2q_2^2}
+% \end{array}} \right].
+%\end{equation}
+%
+% Conversely, the conversion from the rotation matrix to the quaternion is as follows. Suppose the matrix is $ \ bm { R } = \ { m_ { ij } \ } , i , j \ in \ left [ 1 , 2 , 3 \ right ] $ , and its corresponding quaternion $ \ bm { q } $ Given by:         
+%\begin{equation}
+%{q_0} = \frac{{\sqrt {\mathrm{tr}(R) + 1} }}{2},{q_1} = \frac{{{m_{23}} - {m_{32}}}}{{4{q_0}}},{q_2} = \frac{{{m_{31}} - {m_{13}}}}{{4{q_0}}},{q_3} = \frac{{{m_{12}} - {m_{21}}}}{{4{q_0}}}.
+%\end{equation}
+%
+% It is worth mentioning that since $\bm{q}$ and $\bm{-q}$ represent the same rotation, the fact that a quaternion corresponding to $\bm{R}$ is not unique. At the same time, in addition to the conversion methods given above, there are several other calculation methods, and the book is omitted. In actual programming, when $q_0$ is close to 0, the other 3 components will be very large, causing the solution to be unstable. At this point, we will consider using other methods for conversion.
+TODO(Hussein)
+%\sectionTop{ \textsuperscript { \ttfamily*} Similarly, affine, projective transformation}
+
+In addition to the Euclidean transformation, there are several other transformations in the 3D space, but the Euclidean transformation is the simplest. Some of them are related to the measurement geometry, as they may be mentioned in the following explanations, so list them first. The Euclidean transformation maintains the length and angle of the vector, which is equivalent to moving or rotating a rigid body intact without changing its appearance. Several other transformations will change its shape. They all have similar matrix representations.
+
+\begin{enumerate}
+	\item{ \emph{similar transformation} }
+	
+	The similarity transformation has one more degree of freedom than the Euclidean transformation, which allows the object to be uniformly scaled, and its matrix is expressed as
+	
+	\begin{equation}
+	\bm{T}_S = \left[ {\begin{array}{*{20}{c}}
+		{s \bm{R}}& \bm{t}\\
+		{{ \bm{0}^\mathrm{T}}}&1
+		\end{array}} \right].
+	\end{equation}
+	
+	Notice that the rotation part has a scaling factor of $ s $ , which means that we can evenly scale the three coordinates of $ x, y, z $ after the vector is rotated . Due to the inclusion of scaling, the similar transformation no longer keeps the area of the graphic unchanged. You can imagine a cube with a side length of 1 transforming into a side with a length of 10 (but still a cube). The set of three-dimensional similar transforms is also called \textbf{similar transform group}, which is denoted as $ \mathrm {Sim}(3) $ .
+	
+	\item{ \emph{affine transformation} }
+	
+	The matrix form of the affine transformation is as follows:
+	\begin{equation}
+	\bm{T}_A = \left[ {\begin{array}{*{20}{c}}
+		\bm{A} & \bm{t}\\
+		{{\bm{0}^\mathrm{T}}} & 1
+		\end{array}} \right].
+	\end{equation}
+	
+	Unlike the Euclidean transformation, the affine transformation only requires $ \bm {A} $ to be an invertible matrix, not necessarily an orthogonal matrix. An affine transformation is also called an orthogonal projection. After the affine transformation, the cube is no longer square, but the faces are still parallelograms.
+	
+	\item{ \emph{projection transformation} }
+	
+	Projective transformation is the most general transformation, its matrix form is
+	
+	\begin{equation}
+	{\bm{T}_P} = \left[ {\begin{array}{*{20}{c}}
+		\bm{A} & \bm{t}\\
+		{{\bm{a}^\mathrm{T}}} & v
+		\end{array}} \right].
+	\end{equation}
+	
+	Its upper left corner is the reversible matrix $ \bm{A} $ , the upper right corner is the translation $ \bm{t} $ , and the lower left corner is the scale $ \bm{a}^ \mathrm {T} $ . Since the homogeneous coordinates are used, when $ v \neq  0 $ , we can divide the entire matrix by $ v $ to get a matrix with a bottom right corner of 1; otherwise we get a matrix with a lower right corner of $ 0 $ . Therefore, the 2D projective transformation has a total of 8 degrees of freedom, and 3D has a total of 15 degrees of freedom. Projective transformation is the most common form of transformation that has been said so far. The transformation from the real world to the camera photo can be seen as a projective transformation. The reader can imagine what a square tile would look like in a photo: first, it is no longer square. Due to the near-large and small relationship, it is not even a parallelogram, but an irregular quadrilateral.
+\end{enumerate}
+
+\autoref{table:common-transform} summarizes the nature of several transformations currently covered. Note that in the "invariant nature", there is an inclusion relationship from top to bottom. For example, in addition to maintaining volume, the Euclidean transformation also has the properties of parallelism, intersection, and the like.
+
+TODO(Hussein)
+%\begin{table}%[!htp]
+%	\centering
+%	\caption {comparison of common transformation properties}
+%	\label{table:common-transform}
+%	\begin{tabu}{c|c|c|c}
+%		\toprule
+%		Transform Name & Matrix Form & Degrees of Freedom & Invariant \\\midrule
+%		Euclidean transformation \rule{0pt}{20 pt} & $ \left [ { \begin {array}{*{20}{c}}
+%			\bm{R} & \bm{t}\\
+%			{{\bm{0}^\mathrm{T}}}&1
+%			\end {array}} \right ] $ & 6 & Length, Angle, Volume \\ 
+%		Similar transformation \rule{0pt}{20 pt}& $  \left [ { \begin {array}{*{20}{c}}
+%			{s \bm{R}}& \bm{t}\\
+%			{{ \bm{0}^\mathrm{T}}}&1
+%			\end {array}} \right ] $ & 7 & volume ratio \\ 
+%		Affine transformation \rule{0pt}{20 pt}& $  \left [ { \begin {array}{*{20}{c}}
+%			\bm{A} & \bm{t}\\
+%			{{\bm{0}^\mathrm{T}}} & 1
+%			\ End {}} Array \ right ] $    & & 12 is parallel, volume ratio \\ 
+%		Projective transformation \rule{0pt}{20 pt} & $  \left [ { \begin {array}{*{20}{c}}
+%			\bm{A} & \bm{t}\\
+%			{{\bm{a}^\mathrm{T}}} & v
+%			\end {array}} \right ] $ & 15 & Contact plane intersection and tangency \rule{0pt}{20 pt} \\ 
+%		\bottomrule
+%	\end{tabu} 
+%\end{table}
+
+We will later say that the transformation from the real world to the camera photo is a projective transformation. If the focal length of the camera is infinity, then this transformation is an affine transformation. However, before we go into the details of the camera model, we just have a rough impression of them.
