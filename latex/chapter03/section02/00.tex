@@ -1,0 +1,206 @@
+\section{Practice: Eigen}
+
+The practical part of this lecture has two sections. In the first part, we will explain how to use Eigen to represent matrices and vectors, and then extend to the calculation of rotation matrix and transformation matrix. The code for this section is in \textbf{slambook2/ch3/useEigen}.
+
+Eigen \footnote{official home page: \url{http://eigen.tuxfamily.org/index.php?title=Main_Page}. } is a C++ open source linear algebra library. It provides fast linear algebra operations on matrices, as well as functions such as solving equations. Many upper-level software libraries also use Eigen for matrix operations, including g2o, Sophus, and others. In the theoretical part of this lecture, let's learn about Eigen's programming.
+
+Eigen may not be installed on your PC. Please enter the following command to install:
+
+\begin{lstlisting}[language=sh,caption=terminal input:]
+sudo apt-get install libeigen3-dev
+\end{lstlisting}
+
+Most commonly used libraries are available in the Ubuntu software source. Later, if you want to install a library, you may want to search for the Ubuntu software source. With the apt command, we can easily install Eigen. Looking back at the previous lesson, we know that a library consists of header files and library files. The default location of the Eigen header file is in "/usr/include/eigen3/". If you are not sure, you can find it by entering the following command:
+
+\begin{lstlisting}[language=sh,caption=terminal input:]
+sudo locate eigen3
+\end{lstlisting}
+
+Compared to other libraries, Eigen is special in that it is a library built with pure header files (this is amazing!). This means you can only find its header files, not binary files like .so or .a. When you use it, you only need to import Eigen's header file, you don't need to link the library file (because it doesn't have a library file). Write a piece of code below to actually practice the use of Eigen:
+
+\begin{lstlisting}[language=c++,caption=slambook2/ch3/useEigen/eigenMatrix.cpp]
+#include <iostream>
+using namespace std;
+
+#include <ctime>
+// Eigen core
+#include <Eigen/Core>
+// Algebraic operations of dense matrices (inverse, eigenvalues, etc.)
+#include <Eigen/Dense>
+using namespace Eigen;
+
+#define MATRIX_SIZE 50
+
+/****************************
+ * This program demonstrates the use of the basic Eigen type
+ ****************************/
+
+int main(int argc, char **argv) {
+  // All vectors and matrices in Eigen are Eigen::Matrix, which is a template
+  // class. Its first three parameters are: data type, row, column Declare a 2*3
+  // float matrix
+  Matrix<float, 2, 3> matrix_23;
+
+  // At the same time, Eigen provides many built-in types via typedef, but the
+  // bottom layer is still Eigen::Matrix For example, Vector3d is essentially
+  // Eigen::Matrix<double, 3, 1>, which is a three-dimensional vector.
+  Vector3d v_3d;
+  // This is the same
+  Matrix<float, 3, 1> vd_3d;
+
+  // Matrix3d is essentially Eigen::Matrix<double, 3, 3>
+  Matrix3d matrix_33 = Matrix3d::Zero(); // initialized to zero
+  // If you are not sure about the size of the matrix, you can use a matrix of
+  // dynamic size
+  Matrix<double, Dynamic, Dynamic> matrix_dynamic;
+  // simpler
+  MatrixXd matrix_x;
+  // There are still many types of this, we doesn't list them one by one.
+
+  // Here is the operation of the Eigen array
+  // input data (initialization)
+  matrix_23 << 1, 2, 3, 4, 5, 6;
+  // output
+  cout << "matrix 2x3 from 1 to 6: \n" << matrix_23 << endl;
+
+  // Use () to access elements in the matrix
+  cout << "print matrix 2x3: " << endl;
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 3; j++)
+      cout << matrix_23(i, j) << "\t";
+    cout << endl;
+  }
+
+  // The matrix and vector are multiplied (actually still matrices and matrices)
+  v_3d << 3, 2, 1;
+  vd_3d << 4, 5, 6;
+
+  // But in Eigen you can't mix two different types of matrices, like this is
+  // wrong Matrix<double, 2, 1> result_wrong_type = matrix_23 * v_3d; should be
+  // explicitly converted
+  Matrix<double, 2, 1> result = matrix_23.cast<double>() * v_3d;
+  cout << "[1,2,3;4,5,6]*[3,2,1]=" << result.transpose() << endl;
+
+  Matrix<float, 2, 1> result2 = matrix_23 * vd_3d;
+  cout << "[1,2,3;4,5,6]*[4,5,6]: " << result2.transpose() << endl;
+
+  // Also you can't misjudge the dimensions of the matrix
+  // Try canceling the comments below to see what Eigen will report.
+  // Eigen::Matrix<double, 2, 3> result_wrong_dimension =
+  // matrix_23.cast<double>() * v_3d;
+
+  // some matrix operations
+  // Four operations are not demonstrated, just use +-*/.
+  Matrix_33 = Matrix3d::Random(); // Random Number Matrix
+  cout << "random matrix: \n" << matrix_33 << endl;
+  cout << "transpose: \n" << matrix_33.transpose() << endl;
+  cout << "sum: " << matrix_33.sum() << endl;
+  cout << "trace: " << matrix_33.trace() << endl;
+  cout << "times 10: \n" << 10 * matrix_33 << endl;
+  cout << "inverse: \n" << matrix_33.inverse() << endl;
+  cout << "det: " << matrix_33.determinant() << endl;
+
+  // Eigenvalues
+  // Real symmetric matrix can guarantee successful diagonalization
+  SelfAdjointEigenSolver<Matrix3d> eigen_solver(matrix_33.transpose() *
+                                                matrix_33);
+  cout << "Eigen values = \n" << eigen_solver.eigenvalues() << endl;
+  cout << "Eigen vectors = \n" << eigen_solver.eigenvectors() << endl;
+
+  // Solving equations
+  // We solve the equation of matrix_NN * x = v_Nd
+  // The size of N is defined in the previous macro, which is generated by a
+  // random number Direct inversion is the most direct, but the amount of
+  // inverse operations is large.
+
+  Matrix<double, MATRIX_SIZE, MATRIX_SIZE> matrix_NN =
+      MatrixXd::Random(MATRIX_SIZE, MATRIX_SIZE);
+  matrix_NN =
+      matrix_NN * matrix_NN.transpose(); // Guarantee semi-positive definite
+  Matrix<double, MATRIX_SIZE, 1> v_Nd = MatrixXd::Random(MATRIX_SIZE, 1);
+
+  Clock_t time_stt = clock(); // timing
+  // Direct inversion
+  Matrix<double, MATRIX_SIZE, 1> x = matrix_NN.inverse() * v_Nd;
+  cout << "time of normal inverse is "
+       << 1000 * (clock() - time_stt) / (double)CLOCKS_PER_SEC << "ms" << endl;
+  cout << "x = " << x.transpose() << endl;
+
+  // Usually solved by matrix decomposition, such as QR decomposition, the speed
+  // will be much faster
+  time_stt = clock();
+  x = matrix_NN.colPivHouseholderQr().solve(v_Nd);
+  cout << "time of Qr decomposition is "
+       << 1000 * (clock() - time_stt) / (double)CLOCKS_PER_SEC << "ms" << endl;
+  cout << "x = " << x.transpose() << endl;
+
+  // For positive definite matrices, you can also use cholesky decomposition to
+  // solve equations.
+  time_stt = clock();
+  x = matrix_NN.ldlt().solve(v_Nd);
+  cout << "time of ldlt decomposition is "
+       << 1000 * (clock() - time_stt) / (double)CLOCKS_PER_SEC << "ms" << endl;
+  cout << "x = " << x.transpose() << endl;
+
+  return 0;
+}
+\end{lstlisting}
+
+This example demonstrates the basic operations and operations of the Eigen matrix. To compile it, you need to specify the header file directory of Eigen in CMakeLists.txt:
+\begin{lstlisting}[caption=slambook2/ch3/useEigen/CMakeLists.txt]
+# Add header file
+include_directories( "/usr/include/eigen3" )
+\end{lstlisting}
+
+Repeat, because the Eigen library only has header files, so you don't need to link the program to the library with the target \_ link \_ libraries statement. However, for most other libraries, most of the time you need to use the link command. The approach here is not necessarily the best, because others may have Eigen installed in different locations, then you must manually modify the header file directory here. In the rest of the work, we will use the find \_ package command to search the library, but for the time being in this lecture. After compiling this program, run it and you can see the output of each matrix.
+
+\begin{lstlisting}[caption=Terminal input:]
+% build/eigenMatrix
+matrix 2x3 from 1 to 6: 
+1 2 3
+4 5 6
+print matrix 2x3: 
+1	2	3	
+4	5	6	
+[1,2,3;4,5,6]*[3,2,1]=10 28
+[1,2,3;4,5,6]*[4,5,6]: 32 77
+random matrix: 
+0.680375   0.59688 -0.329554
+-0.211234  0.823295  0.536459
+0.566198 -0.604897 -0.444451
+transpose: 
+0.680375 -0.211234  0.566198
+0.59688  0.823295 -0.604897
+-0.329554  0.536459 -0.444451
+sum: 1.61307
+trace: 1.05922
+times 10: 
+6.80375   5.9688 -3.29554
+-2.11234  8.23295  5.36459
+5.66198 -6.04897 -4.44451
+inverse: 
+-0.198521   2.22739    2.8357
+1.00605 -0.555135  -1.41603
+-1.62213   3.59308   3.28973
+it: 0.208598
+\end{lstlisting}
+
+Since the detailed comments are given in the code, each line of the statement is not explained here. In this book, we will only give a description of several important places (the latter part will also maintain this style).
+
+\begin{enumerate}
+	\item readers are best to enter the above code (not including comments). At least compile and run the above program.
+	
+	\item Kdevelop may not prompt C++ member operations, which is caused by its incompleteness. Please follow the above to enter, do not care if it prompts an error. Clion will give you a complete hint.
+	
+	The matrix provided by \item Eigen is very similar to MATLAB, and almost all data is treated as a matrix. However, in order to achieve better efficiency, you need to specify the size and type of the matrix in Eigen. For matrices that know the size at compile time, they are processed faster than dynamically changing matrices. Therefore, data such as rotation matrices and transformation matrices can be determined at compile times by their size and data type.
+	
+	The matrix implementation inside \item Eigen is more complicated. I won't introduce it here. We hope that you can use Eigen's matrix like the built-in data types like float and double. This should be in line with the original intention of its design.
+	
+	The \item Eigen matrix does not support automatic type promotion, which is quite different from C++'s built-in data types. In a C++ program, we can add and multiply a float data and double data, and \textbf{the compiler will automatically convert the data type to the most appropriate one}. In Eigen, for performance reasons, you must \textbf{explicitly} convert the matrix type. And if you forget to do this, Eigen will (not very friendly) prompt you with a "YOU MIXED DIFFERENT NUMERIC TYPES ..." compilation error. You can try to find out which part of the error message this message appears in. If the error message is too long, it is best to save it to a file and find it.
+	
+	\item is the same, in the calculation process also need to ensure the correctness of the matrix dimension, otherwise there will be "YOU MIXED MATRICES OF DIFFERENT SIZES" error. Please don't complain about this kind of error prompting. For C++ template meta-programming, it is very lucky to be able to prompt the information that can be read. Later, if you find that Eigen is wrong, you can directly look for the uppercase part and figure out what the problem is.
+	
+	\item Our routines only cover basic matrix operations. You can read more about Eigen by reading the Eigen official website tutorial: \\ { \url{http://eigen.tuxfamily.org/dox-devel/modules.html} }. Only the simplest part is demonstrated here. It is not equal to the fact that you can understand Eigen.
+\end{enumerate}
+
+In the last piece of code, the efficiency of inversion and QR decomposition is compared. You can look at the time difference on your own machine. Is there a significant difference between the two methods?

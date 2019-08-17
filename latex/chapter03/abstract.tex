@@ -1,0 +1,13 @@
+\begin{mdframed}
+	\textbf{main goal}
+	\begin{enumerate}
+		\item understands the description of rigid body motion in three-dimensional space: rotation matrix, transformation matrix, quaternion and Euler angle.
+		\item grasps the matrix and geometry module usage of the Eigen library.
+	\end{enumerate}
+\end{mdframed}
+
+In the last lecture, we explained the framework and content of visual SLAM. This lecture will introduce one of the basic problems of visual SLAM: \textbf{ How to describe the motion of a rigid body in three-dimensional space? }
+Intuitively, we certainly know that this consists of one rotation plus one translation.
+Translation does not really have much problem, but the processing of rotation is a hassle.
+We will introduce the meaning of rotation matrices, quaternions, Euler angles, and how they are computed and transformed. In the practice section, we will introduce the linear algebra library Eigen. It provides a C++ matrix calculation, and its Geometry module also provides the structure described quaternion like rigid body motion.
+Eigen's optimization is perfect, but there are some special places to use it, we will leave it to the program.

@@ -1,0 +1,60 @@
+\subsection{transform matrix and homogeneous coordinates}
+
+The formula \eqref{eq:RT} fully expresses the rotation and translation of Euclidean space, but there is still a small problem: the transformation relationship here is not a linear relationship. Suppose we made two transformations: $ \bm {R}_ 1 , \bm {t}_ 1 $ and $ \bm {R}_ 2 , \bm {t}_ 2 $ :
+
+\[
+\bm{b} = {\bm{R}_1} \bm{a} + {\bm{t}_1}, \quad \bm{c} = {\bm{R}_2} \bm{b} + {\bm{t}_2}.
+\]
+So, the transformation from $ \bm{a} $ to $ \bm{c} $ is:
+\[
+\bm{c} = {\bm{R}_2}\left( {{\bm{R}_1} \bm{a} + {\bm{t}_1}} \right) + {\bm{t}_2}.
+\]
+This form will look awkward after multiple transformations. Therefore, we introduce homogeneous coordinates and transformation matrices, rewriting the form \eqref{eq:RT}:
+\begin{equation}
+\left[\begin{array}{l} 
+\ bm {a} ' \\
+1
+\end{array} \right] = 
+\left[ {\begin{array}{*{20}{c}}
+	\bm{R}&\bm{t}\\
+	{{\bm{0}^\mathrm{T}}}&1
+	\end{array}} \right]
+\left[ \begin{array}{l}
+\ bm {a} \\
+1
+\end{array} \right]  \buildrel \Delta \over = \bm{T} \left[ \begin{array}{l}
+\ bm {a} \\
+1
+\end{array} \right].
+\end{equation}
+
+This is a mathematical trick: we add $ 1 $ at the end of a 3D vector and turn it into a 4D vector called \textbf{homogeneous coordinates}. For this four-dimensional vector, we can write the rotation and translation in a matrix, making the whole relationship a linear relationship. In this formula, the matrix $ \bm {T} $ is called \textbf{Transform Matrix}.
+
+We temporarily use $  \tilde { \bm {a} } $ to represent the homogeneous coordinates of $ \bm {a} $ . Then, relying on homogeneous coordinates and transformation matrices, the superposition of the two transformations can have a good form:
+\begin{equation}
+	\tilde{\bm{b}} = \bm{T}_1 \tilde{\bm{a}}, \  \tilde{\bm{c}} = \bm{T}_2 \tilde{\bm{b}} \quad \Rightarrow \tilde{\bm{c}} = \bm{T}_2 \bm{T_1} \tilde{\bm{a}}.
+\end{equation}
+But the symbols that distinguish between homogeneous and non-homogeneous coordinates make us annoyed, because here we only need to add 1 at the end of the vector or remove 1 to be \footnote {but the purpose of the homogeneous coordinates is not limited to this, we also in Chapter 7 Will introduce again. }. So, without ambiguity, we will write it directly as $ \bm {b}= \bm {T} \bm {a} $ , and by default we have a homogeneous coordinate conversion \footnote { Note that when homogeneous coordinate transformation is not performed, the multiplication here is not true in the matrix dimension. }.
+
+Regarding the transformation matrix $ \bm{T} $ , it has a special structure: the upper left corner is the rotation matrix, the right side is the translation vector, the lower left corner is $ \bm{0} $ vector, and the lower right corner is 1. This matrix is also known as the Special Euclidean Group:
+
+\begin{equation}
+\mathrm{SE}(3) = \left\{ \bm{T} = \left[ {\begin{array}{*{20}{c}}
+	\bm{R} & \bm{t} \\
+	{{\bm{0}^\mathrm{T}}} & 1
+	\end{array}} \right]
+\in \mathbb{R}^{4 \times 4} | \bm{R} \in \mathrm{SO}(3), \bm{t} \in \mathbb{R}^3\right\} .
+\end{equation}
+
+Like $ \mathrm{SO}( 3 ) $ , solving the inverse of the matrix represents an inverse transformation:
+
+\begin{equation}
+{ \bm{T}^{ - 1}} = \left[ {\begin{array}{*{20}{c}}
+	{{\bm{R}^\mathrm{T}}}&{ - {\bm{R}^\mathrm{T}}\bm{t}}\\
+	{{\bm{0}^\mathrm{T}}}&1
+	\end{array}} \right].
+\end{equation}
+
+Again, we use the notation of $ \bm{T}_{12} $ to represent a transformation from 2 to 1. Moreover, in order to keep the symbol concise, in the case of no ambiguity, the symbols of the homogeneous coordinates and the ordinary coordinates are not deliberately distinguished later, and \textbf{the default is to use the one that conforms to the algorithm}. For example, when we write $ \bm {T} \bm{a} $ , we use homogeneous coordinates (otherwise we can't calculate). When you write $ \bm{Ra} $ , you use non-homogeneous coordinates. If written in an equation, it is assumed that the conversion from homogeneous coordinates to normal coordinates is already done - because the conversion between homogeneous and non-homogeneous coordinates is actually very easy, but in C++ programs. You can do this with \textbf{operator overload} to ensure that the operations you see in the program are uniform.
+
+To review: First, we introduce the vector and its coordinate representation, and introduce the operation between the vectors; then, the motion between the coordinate systems is described by the Euclidean transformation, which consists of translation and rotation. The rotation can be described by the rotation matrix $ \mathrm{SO}( 3 ) $ , while the translation is directly described by a $ \mathbb{R}^ 3 $ vector. Finally, if the translation and rotation are placed in a matrix, the transformation matrix $ \mathrm{SE}( 3 ) $ is formed .

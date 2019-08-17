@@ -1,0 +1,80 @@
+\subsection{Quad operation}
+
+A quaternion is the same as a normal complex, and a series of operations can be performed. Commonly there are four arithmetic operations, multiplication, inversion, conjugate, and so on. The following are introduced separately.
+
+There are two quaternions $ \bm {q}_a, \bm {q}_b $ , whose vectors are represented as $ [s_a, \bm {v}_a]^ \mathrm {T}, [s_b, \ Bm {v}_b]^ \mathrm {T} $ , or the original quaternion is expressed as:
+\[
+\ bm {q} _a = s_a + x_ai + y_a + z_ak, \ quad  \ bm {q} _b = execution + x_bi + y_bj + z_bk.
+\]
+Then, its operation can be expressed as follows.
+
+\begin{enumerate}
+	\item { \emph {addition and subtraction}}
+	
+The addition and subtraction of the 	quaternion $ \bm {q}_a, \bm {q}_b $ is:
+	\begin{equation} 	
+	\bm{q}_a \pm \bm{q}_b = \left[ s_a \pm s_b, \bm{v}_a \pm \bm{v}_b \right]^\mathrm{T}.
+	\end{equation}
+	\item { \emph {multiplication}}
+	
+	Multiplication is the multiplication of each item of $ \bm {q}_a $ with each item of $ \bm {q}_b $ , and finally, the imaginary part is done according to the formula \eqref {eq:quaternionVirtual}. Finishing is available:
+	\begin{equation}
+	\begin{aligned}
+	\bm{q}_a \bm{q}_b &= {s_a}{s_b} - {x_a}{x_b} - {y_a}{y_b} - {z_a}{z_b}\\
+	&+ \left( {{s_a}{x_b} + {x_a}{s_b} + {y_a}{z_b} - {z_a}{y_b}} \right)i\\
+	&+ \left( {{s_a}{y_b} - {x_a}{z_b} + {y_a}{s_b} + {z_a}{x_b}} \right)j\\
+	&+ \left( {{s_a}{z_b} + {x_a}{y_b} - {y_a}{x_b} + {z_a}{s_b}} \right)k.
+	\end{aligned}
+	\end{equation}
+	Although a little complicated, the form is neat and orderly. If written in vector form and using internal and external product operations, the expression will be more concise:
+	\begin{equation}
+	\bm{q}_a \bm{q}_b = \left[ s_a s_b - \bm{v}_a^\mathrm{T} \bm{v}_b, s_a\bm{v}_b + s_b\bm{v}_a + \bm{v}_a \times \bm{v}_b \right]^\mathrm{T}.
+	\end{equation}
+	Under this multiplication definition, the two real quaternion products are still real, which is also consistent with the complex number. However, note that due to the existence of the last outer product, quaternion multiplication is usually not commutative unless $ \bm {v}_a $ and $ \bm {v}_b $ at $ \mathbb {R}^ 3 $ collinear line, at which point the outer product term is zero.
+
+	\item { \emph {module} }
+		
+	The modulus of a quaternion is defined as
+	\begin{equation}
+	\| \bm{q}_a \| = \sqrt{ s_a^2 + x_a^2 + y_a^2 + z_a^2 }.
+	\end{equation}
+	It can be verified that the modulus of the product of two quaternions is the product of the modulo. This makes the unit quaternion still multiplied by the unit quaternion.
+	\begin{equation}
+	\| \bm{q}_a \bm{q}_b \| = \|\bm{q}_a \| \| \bm{q}_b \|.
+	\end{equation}
+	
+	\item { \emph {conjugate} }
+	
+	The conjugate of a quaternion is to take the imaginary part as the opposite:
+	\begin{equation}
+	\ rm{q}_a ^ * = s_a - x_ai - y_aj - z_ak = [s_a, - \rm{the}_a] ^ \frac{T}.
+	\end{equation}
+	The quaternion conjugate is multiplied by itself, and a real quaternion is obtained. The actual part is the square of the modulo length:
+	\begin{equation}
+	\bm{q}^* \bm{q} = \bm{q} \bm{q}^* = [s_a^2+\bm{v}^\mathrm{T} \bm{v}, \bm{0} ]^\mathrm{T}.
+	\end{equation}
+
+	\item { \emph{reverse} }
+	
+	The inverse of a quaternion is
+	\begin{equation}
+	\label{eq:quaternionInverse}
+	\ bm{q} ^ { - 1 } = \bm{q} ^ * / \ | \bm{q} \ | ^ 2 .       
+	\end{equation}
+	According to this definition, the product of the quaternion and its own inverse is the real quaternion $ \bm {1} $ :
+	\begin{equation}
+	\bm{q} \bm{q}^{-1} = \bm{q}^{-1} \bm{q} = \bm{1}.
+	\end{equation}
+	
+	If $ \bm{q} $ is a unit quaternion, its inverse and conjugate are the same amount. At the same time, the inverse of the product has properties similar to matrices:
+	\begin{equation}
+	\left( \bm{q}_a \bm{q}_b \right)^{-1} = \bm{q}_b^{-1} \bm{q}_a^{-1}.
+	\end{equation}
+	
+	\item { \emph {multiplication} }
+	
+	Similar to vectors, quaternions can be multiplied by numbers:
+	\begin{equation}
+	k \bm{q} = \left[ ks, k\bm{v} \right]^\mathrm{T}.
+	\end{equation}
+\end{enumerate}

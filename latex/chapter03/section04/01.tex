@@ -1,0 +1,37 @@
+\subsection{definition of quaternion}
+
+The rotation matrix describes the rotation of 3 degrees of freedom with 9 quantities, with redundancy; the Euler angles and the rotation vectors are compact but singular. In fact, we \textbf{cannot find a three-dimensional vector description without singularity} \textsuperscript{ \cite{Stuelpnagel1964}}. This is somewhat similar to using two coordinates to represent the Earth's surface (such as longitude and latitude), and there will be singularity (latitude is meaningless when latitude is $ \pm  90 ^ \circ $ ).
+
+Recall the plurals that I have studied before. We use the complex set $ \mathbb {C} $ to represent the vector on the complex plane, and the complex multiplication represents the rotation on the complex plane: for example, multiplying the complex $ i $ is equivalent to rotating a complex vector counterclockwise by $ 90 ^ \circ $ . Similarly, when expressing a three-dimensional space rotation, there is also an algebra similar to a complex number: \textbf{quaternary}. The quaternion is an extended complex number found by Hamilton. It \textbf{ is both compact and singular}. If you say the shortcomings, the quaternion is not intuitive enough, and its operation is a bit more complicated.
+
+Comparing quaternions to complex numbers can help you understand quaternions faster. For example, when we want to rotate the vector of a complex plane by $ \theta $ , we can multiply this complex vector by $ \mathrm {e}^{i \theta } $ . This is a complex number represented by polar coordinates. It can also be written in the usual form, as long as the Euler formula is used:
+\begin{equation}
+\mathrm{e}^{i\theta} = \cos \theta + i \sin \theta.
+\end{equation}
+This is a plural of unit length. Therefore, in the case of two dimensions, the rotation can be described by \textbf{unit plural}. Similarly, we will see that 3D rotation can be described by \textbf{unit quaternion}.
+
+A quaternion $ \bm{q} $ has a real part and three imaginary parts. The book writes the real part in front (and there are places where the real part is written later), like this:
+\begin{equation}
+ \bm{q} = q_0 + q_1 i + q_2 j + q_3 k,
+\end{equation}
+Where $ i,j,k $ are the three imaginary parts of the quaternion. These three imaginary parts satisfy the following relationship:
+\begin{equation}
+\label{eq:quaternionVirtual}
+\left\{ \begin{array}{l}
+{i^2} = {j^2} = {k^2} =  - 1\\
+ij = k, ji = - k \\
+jk = i,kj =  - i\\
+ki = j, i = - j
+\end{array} \right. .
+\end{equation}
+If we look at $ i, j, k $ as three axes, they are the same as their own multiplications and complex numbers, and the multiplication and outer product are the same. Sometimes people also use a scalar and a vector to express quaternions:
+\[
+ \bm{q} = \left[ s, \bm{v} \right]^\mathrm{T}, \quad s=q_0 \in \mathbb{R},\quad \bm{v} = [q_1, q_2, q_3]^\mathrm{T} \in \mathbb{R}^3,
+\]
+Here, $ s $ is called the real part of the quaternion, and $ \bm {v} $ is called its imaginary part. If the imaginary part of a quaternion is $ \bm {0} $ , it is called \textbf{real quaternion}. Conversely, if its real part is $ 0 $ , it is called \textbf{imaginary quaternion}.
+
+ Considering that 3D space requires 3 axes and Quaternion also has 3 imaginary parts, can a virtual quaternion correspond to a space point? In fact, we are doing this.
+
+You can use \textbf{unit quaternion} to represent any rotation in 3D space, but this expression is subtly different from the plural. In the plural, multiplying by $ i $ means rotating $ 90 ^ \circ $ . Does this mean that the quaternion, multiplied by $ i $ is rotated around the $ i $ axis by $ 90 ^ \circ $ ? So, $ ij = k $ does that mean, first around the $ i $ transfer $ 90 ^ \circ $ , then around $ J $ transfer $ 90 ^ \circ $ , equivalent to around $ k$ turn $ 90 ^ \circ $ ? Readers can find a cell phone to plan - then you will find that this is not the case. The correct situation should be that multiplying $ i $ corresponds to rotating $ 180 ^ \circ $ , in order to guarantee the nature of $ ij=k $ . And $ i^ 2 =- 1 $ means that after rotating $ 360 ^ \circ $ around the $ i $ axis, I get an opposite thing. This thing has to be rotated for two weeks to be equal to its original appearance.
+
+This seems a bit mysterious, the complete explanation needs to introduce too much extra things, we still calm down and come back to the eyes. At least, we know that a unit quaternion can express the rotation of a three-dimensional space. So what are the nature of the quaternions themselves, and what can they do with each other? Let us first examine the algorithm between quaternions.

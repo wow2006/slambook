@@ -1,0 +1,57 @@
+\subsection{point and vector, coordinate system}
+
+The space in our daily life is three-dimensional, so we are born to be used to the movement of three-dimensional space. The three-dimensional space consists of three axes, so the position of one spatial point can be specified by three coordinates. However, we should now consider \textbf{rigid body} , which has not only its position, but also its own posture. The camera can also be viewed as a rigid body in three dimensions, so the position is where the camera is in space, and the attitude is the orientation of the camera. Combined, we can say, "The camera is in the space $ ( 0 , 0 , 0 ) $ point, facing the front". But this natural language is cumbersome, and we prefer to describe it in a mathematical language.
+
+We start with the most basic content: \textbf{dots} and \textbf{vector}. Points are the basic elements in space, no length, no volume. Connect the two points to form a vector. A vector can be thought of as an arrow pointing from one point to another. Need to remind the reader, please do not confuse the vector with its \textbf{coordinate} concept. A vector is one of the things in space, such as $ \bm{a} $ . Here $ \bm{a} $ does not need to be associated with several real numbers. Only when we specify a \textbf{coordinate system} in this three-dimensional space can we talk about the coordinates of the vector in this coordinate system, that is, find several real numbers corresponding to this vector.
+
+With the knowledge of linear algebra, the coordinates of a point in 3D space can also be described by $ \mathbb{R}^3 $ . How to describe it? Suppose that in this linear space, we find a set of \textbf{base} \footnote{ of the space in case the reader forgets that the base is a set of linearly independent vectors of Zhang Cheng's space, and some books are also called \textbf{Base}. } $ (\bm{e}_1,\bm{e}_2,\bm{e}_3) $ , then, the arbitrary vector $ \bm{a} $ has a \textbf{coordinate} under this set of bases:
+
+\begin{equation}
+\bm{a} = \left[ {{\bm{e}_1},{\bm{e}_2},{\bm{e}_3}} \right]\left[ \begin{array}{l}
+{a_1}\\
+{a_2}\\
+{a_3}
+\end{array} \right] = {a_1}{\bm{e}_1} + {a_2}{\bm{e}_2} + {a_3}{\bm{e}_3}.
+\end{equation}
+
+Here $ (a_ 1 , a_ 2 , a_ 3 )^ \mathrm {T} $ is called $ \bm {a} $ under this base coordinates \footnote {book vector is column vector, this and general mathematics Books are similar. }. The specific value of the coordinates, one is related to the vector itself, and the other is related to the selection of the coordinate system (base). The coordinate system usually consists of 3 orthogonal coordinate axes (although it can also be non-orthogonal, it is rare in practice). For example, given $ \bm {x} $ and $ \bm {y} $ axis, the $ \bm {z} $ axis can pass the right-hand (or left-hand) rule by $ \bm {x} \times  \bm {y} $Defined. According to different definitions, the coordinate system is divided into left-handed and right-handed. The third axis of the left hand system is opposite to the right hand system. Most 3D libraries use right-handed (such as OpenGL, 3D Max, etc.), and some libraries use left-handed (such as Unity, Direct3D, etc.).
+
+Based on basic linear algebra knowledge, we can talk about vectors and vectors, and operations between vectors and numbers, such as number multiplication, addition, subtraction, inner product, outer product, and so on. Multiplication and addition and subtraction are both fairly basic and intuitive. For example, the result of adding two vectors is to add their respective coordinates, subtraction, and so on. I won't go into details here. Internal and external products may be somewhat unfamiliar to the reader, and their calculations are given here. For $ \bm {a}, \bm {b} \in  \mathbb {R}^ 3 $ , in the usual sense \footnote {the inner product also has formal rules, but this book only discusses the usual inner product. The inner product of } can be written as:
+
+\begin{equation}
+\bm{a} \cdot \bm{b} = { \bm{a}^\mathrm{T}}\bm{b} = \sum\limits_{i = 1}^3 {{a_i}{b_i}}  = \left| \bm{a} \right|\left| \bm{b} \right|\cos \left\langle {\bm{a},\bm{b}} \right\rangle .
+\end{equation}
+
+Where $ \left \langle { \bm {a}, \bm {b}} \right \rangle $ refers to the angle between the vector $ \bm {a}, \bm {b} $ . The inner product can also describe the projection relationship between vectors. The outer product is like this:
+
+\begin{equation}
+\label{eq:cross}
+\bm{a} \times \bm{b} = \left\| {\begin{array}{*{20}{c}}
+	\bm{e}_1 & \bm{e}_2 & \bm{e}_3 \\
+	{{a_1}}&{{a_2}}&{{a_3}}\\
+	{{b_1}}&{{b_2}}&{{b_3}}
+	\end{array}} \right\| = \left[ \begin{array}{l}
+{a_2}{b_3} - {a_3}{b_2}\\
+{a_3}{b_1} - {a_1}{b_3}\\
+{a_1}{b_2} - {a_2}{b_1}
+\end{array} \right] = \left[ {\begin{array}{*{20}{c}}
+	0&{ - {a_3}}&{{a_2}}\\
+	{{a_3}}&0&{-{a_1}}\\  
+	{-{a_2}}&{{a_1}}&0  
+	\end{array}} \right] \bm{b} \buildrel \Delta \over = { \bm{a}^ \wedge } \bm{b}.
+\end{equation}
+
+The result of the outer product is a vector whose direction is perpendicular to the two vectors, and the size is $ \left | \bm{a} \right | \left | \bm{b} \right | \left \langle { \bm {a}, \bm {b}} \right \rangle  $ , is the directed area of the quadrilateral of the two vectors.
+For outer product operations, we introduce the $ ^ \wedge $ symbol and write $ \bm{a} $ as a matrix. In fact, it is a \textbf {antisymmetric matrix} (skew-symmetric matrix) \footnote{antisymmetric matrix $ \bm{A} $ meets $ \bm{A}^ \mathrm{T}=- \bm{A} $ . }, you can record $ ^ \wedge $ as an antisymmetric symbol.
+This writes the outer product $ \bm{a} \times  \bm{b} $ as the multiplication of the matrix and the vector $ { \bm{a}^ \wedge } \bm{b} $ , which turns it into a linear Operation.
+This symbol will be used frequently in the following, please remember it, and this symbol is a one-to-one mapping, meaning that any vector corresponds to a unique anti-symmetric matrix, and vice versa:
+
+\begin{equation}
+\bm{a}^\wedge = \left[ {\begin{array}{*{20}{c}}
+	0&{-{a_3}}&{{a_2}}\\  
+	{{a_3}}&0&{ - {a_1}}\\
+	{ - {a_2}}&{{a_1}}&0
+	\end{array}} \right].
+\end{equation}
+
+At the same time, the reader needs to be reminded that the vector and addition and subtraction, internal and external products can be calculated even when they do not talk about their coordinates. For example, although the inner product can be expressed by the sum of the product products of the two vectors when there are coordinates, the inner product of the two can be calculated by the length and the angle even if their coordinates are not known. Therefore, the inner product result of the two vectors is independent of the selection of the coordinate system.

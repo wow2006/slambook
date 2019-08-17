@@ -1,0 +1,75 @@
+\subsection{Euclidean transformation between coordinate systems}
+We often define a variety of coordinate systems in the actual scene. In robotics, you define each coordinate system for each link and joint; in 3D mapping, we also define the coordinate system for each cuboid and cylinder. If you consider a moving robot, it is common practice to set an inertial coordinate system (or world coordinate system) that can be considered stationary, such as 
+$ \bm{TODO(Hussein)} $ defined coordinate system. At the same time, the camera or robot is a moving coordinate system, such as the coordinate system defined by $x_C, y_C, z_C$. We might ask: a vector $\bm{p}$ in the camera's field of view, with coordinates in the camera coordinate system of $\bm{p}_c$, and in the world coordinate system, its coordinates are $ \bm{p}_w$, then how is the conversion between these two coordinates? At this time, it is necessary to first obtain the coordinate value of the point for the robot coordinate system, and then according to the robot pose \textbf{transform} into the world coordinate system. We need a mathematical means to describe this transformation. As we will see later, we can describe it with a matrix $\bm{T}$.
+
+\begin{figure}[!htp]
+	\centering
+  	\includegraphics[width=0.7\textwidth]{rigidMotion/axisTransform.pdf}
+	\caption {Coordinate transformation. For the same vector $ \bm{} the p- $ , it coordinates in the world coordinate system $ \bm{} _w the p- $ and coordinate in the camera coordinate system $ \bm{} _c the p- $ is different. This transformation relationship is described by the transformation matrix $ \bm{T} $ . }
+	\label{fig:axisTransform}
+\end{figure}
+
+Intuitively, the motion between two coordinate systems consists of a rotation plus a translation called \textbf {rigid body motion}. Camera movement is a rigid body movement. During the rigid body motion, the length and angle of the same vector in each coordinate system will not change. Imagine you throw your phone into the air and \footnote {Please don't put it into practice before it falls to the ground . }, there may only be differences in spatial position and posture, and its own length, angle of each face, etc. will not change. The phone will not be squashed like an eraser for a while, and will be stretched for a while. At this point, we say that the phone coordinate system is between the world coordinates, which is a difference of \textbf {Euclidean Transform}.
+
+The Euclidean transformation consists of rotation and translation. We first consider rotation. Let a unit of orthogonal base $ ( \bm {e}_ 1 , \bm {e}_ 2 , \bm {e}_ 3 ) $ after a rotation becomes $ ( \bm {e}_ 1 ' , \bm {e}_ 2 ', \bm {e}_ 3 ') $ . Then, for the same vector $ \bm {a} $ (the vector does not move with the rotation of the coordinate system), its coordinates in two coordinate systems are $ [a_ 1 , a_ 2 , a_ 3 ] ^ \mathrm {T} $ and $[a'_ 1 , a'_ 2 , a'_ 3 ]^ \mathrm {T} $ . Because the vector itself has not changed, according to the definition of coordinates, there are:
+
+\begin{equation}
+\left[ \bm{e}_1,\bm{e}_2,\bm{e}_3 \right]\left[ \begin{array}{l}
+{a_1}\\
+{a_2}\\
+{a_3}
+\end{array} \right] = \left[ \bm{e}_1', \bm{e}_2', \bm{e}_3' \right]\left[ \begin{array}{l}
+a'_1\\
+a'_2\\
+a'_3
+\end{array} \right].
+\end{equation}
+
+To describe the relationship between the two coordinates, we multiply the left and right sides of the above equation by $ \left [ \begin {array}{l}
+\bm{e}_1^\mathrm{T}\\
+\bm{e}_2^\mathrm{T}\\
+\bm{e}_3^\mathrm{T}
+\end {array} \right ] $ , then the coefficient on the left becomes the identity matrix, so:
+%\clearpage
+\begin{equation}
+\left[ \begin{array}{l}
+{a_1}\\
+{a_2}\\
+{a_3}
+\end{array}\right]=\left[{\begin{array}{*{20}{c}}    
+	{\bm{e}_1^\mathrm{T}\bm{e}_1'} & {\bm{e}_1^\mathrm{T}\bm{e}_2'} & {\bm{e}_1^\mathrm{T}\bm{e}_3'}\\
+	{\bm{e}_2^\mathrm{T}\bm{e}_1'} & {\bm{e}_2^\mathrm{T}\bm{e}_2'} & {\bm{e}_2^\mathrm{T}\bm{e}_3'}\\
+	{\bm{e}_3^\mathrm{T}\bm{e}_1'} & {\bm{e}_3^\mathrm{T}\bm{e}_2'} & {\bm{e}_3^\mathrm{T}\bm{e}_3'}
+	\end{array}} \right]\left[ \begin{array}{l}
+a_1'\\
+a_2'\\
+a_3'
+\end{array} \right] \buildrel \Delta \over = \bm{R} \bm{a}'.
+\end{equation}
+We take the intermediate matrix out and define it as a matrix $ \bm{R} $ . This matrix consists of the inner product between the two sets of bases, characterizing the coordinate transformation relationship of the same vector before and after the rotation. As long as the rotation is the same, then this matrix is the same. It can be said that the matrix $ \bm{R} $ describes the rotation itself. So called \textbf{rotation matrix} (Rotation matrix). At the same time, the components of the matrix are the inner product of the two coordinate system bases. Since the length of the base vector is 1, it is actually the cosine of the angle between the base vectors. So this matrix is also called \textbf{Direction Cosine Matrix}. We will call it a rotation matrix in the following.
+
+The rotation matrix has some special properties. In fact, it is an orthogonal matrix with a determinant of 1 \footnote{orthogonal matrix that is inversely transposed by itself. The orthogonality of the rotation matrix can be derived directly from the definition. } \footnote{The determinant is 1 is artificially defined. In fact, only its determinant is $ \pm  1 $ , but the determinant is $ - 1 $ is called R rotation, that is, one rotation plus one reflection. }. Conversely, an orthogonal matrix with a determinant of 1 is also a rotation matrix. So, you can define a collection of $ n $ dimensional rotation matrices as follows:
+\begin{equation}
+\mathrm{SO}(n) = \{ \bm{R} \in \mathbb{R}^{n \times n} | \bm{R R}^\mathrm{T} = \bm{I}, \mathrm{det} (\bm{R})=1 \}.
+\end{equation}
+
+$ \mathrm {SO}(n) $ isthe meaningof \textbf {Special Orthogonal Group}. We leave the contents of the "group" to the next lecture. This collection consists ofa rotation matrix of $ n $ dimensional space, in particular, $ \mathrm {SO}( 3 ) $ refers to the rotation of the three-dimensional space. By rotating the matrix, we can talk directly about the rotation transformation between the two coordinate systems without having to start from the base.
+
+Since the rotation matrix is an orthogonal matrix, its inverse (ie, transpose) describes an opposite rotation. According to the above definition, there are:
+\begin{equation}
+\bm{a} '= \bm{R}^{-1} \bm{a} = \bm{R}^ \mathrm{T} \bm{a}.
+\end{equation}
+Obviously $ \bm{R}^\mathrm{T} $ portrays an opposite rotation.
+
+In the Euclidean transformation, there is translation in addition to rotation. Consider the vector $ \bm{a} $ in the world coordinate system , after a rotation ( depicted by $ \bm{R} $ ) and a translation of $ \bm{t} $ , you get $ \bm{a}' $ , then put the rotation and translation together, there are:
+\begin{equation}
+\label{eq:RT}
+\ bm {a} '= \ bm {R} \ bm {a} + \ bm {t}.
+\end{equation}
+Where $ \bm{t} $ is called a translation vector. Compared to rotation, the translation part simply adds the translation vector to the coordinates after the rotation, which is very simple. By the above formula, we completely describe the coordinate transformation relationship of an Euclidean space using a rotation matrix $ \bm{R} $ and a translation vector $ \bm{t} $ . In practice, we will define the coordinate system 1, coordinate system 2, then the vector $ \bm{a} $ under the two coordinates is $ \bm{a}_1 , \bm{a}_2 $ , they are The relationship between the two, in accordance with the complete writing, should be:
+\begin{equation}
+\ bm{a}_1 = \bm{R}_{12} \bm{a}_2 + \bm{t}_{12}.
+\end{equation}
+Here $ \bm{R}_{12} $ means "transform the vector of coordinate system 2 into coordinate system 1". Since the vector is multiplied to the right of this matrix, its subscript is \textbf{read from right to left}. This is also the customary way of writing this book. Coordinate transformations are easy to confuse, especially if multiple coordinate systems exist. Similarly, if we want to express "rotation matrix from 1 to 2", we write it as $ \bm{R}_{21} $ . The reader must be clear about the notation here, because different books have different writing methods, some will be recorded as the top left/subscript, and the text will be written on the right side.
+
+About panning $ \bm {t}_{12} $ , it actually corresponds to the coordinate system 1 origin pointing to the coordinate system 2 origin vector, \textbf{ coordinates taken under coordinate system}, so I suggest readers to put it It is written as "a vector from 1 to 2." But the reverse $ \bm {t}_{21} $ , which is a vector from 2 to 1 \textbf{coordinates in coordinate system 2}, is not equal to $ - \bm{t}_{12} $ , but related to the rotation of the two systems \footnote{although from the vector level, they are indeed inverse relations, but the coordinates of the two vectors are not opposite. Can you think about why this is? }. Therefore, when beginners ask the question "Where is my coordinates?", we need to clearly explain the meaning of this sentence. Here "my coordinates" actually refers to the vector from the world coordinate system pointing to the origin of the coordinate system of the world, and the coordinates obtained in the world coordinate system. Corresponding to the mathematical symbol, it should be the value of $ \bm{t}_{WC} $ . For the same reason, it is not $ - \bm {t}_{CW} $ .

@@ -1,0 +1,40 @@
+\subsection{rotation vector}
+
+We return to the theoretical part. With a rotation matrix to describe the rotation, is there enough a transformation matrix to describe a 6-degree-of-freedom three-dimensional rigid body motion? Matrix representation has at least the following disadvantages:
+
+\begin{enumerate}
+	\item  $ \mathrm {SO}( 3 ) $ has a rotation matrix of 9 quantities, but only 3 degrees of freedom in one rotation. Therefore this expression is redundant. Similarly, the transformation matrix expresses a 6-degree-of-freedom transformation with 16 quantities. So, is there a more compact representation?
+	The \item rotation matrix itself has constraints: it must be an orthogonal matrix with a determinant of 1. The same is true for the transformation matrix. These constraints make the solution more difficult when you want to estimate or optimize a rotation matrix/transform matrix.
+\end{enumerate}
+
+Therefore, we hope that there is a way to describe rotation and translation in a compact manner. For example, is it feasible to express rotation with a three-dimensional vector and express transformation with a six-dimensional vector? In fact, any rotation can be characterized by \textbf {a rotation axis and a rotation angle}. Thus, we can use a vector whose direction is consistent with the axis of rotation and the length is equal to the angle of rotation. This vector is called \textbf {rotation vector} (or axis/angle axis, Axis-Angle), and only a three-dimensional vector is needed to describe the rotation. Similarly, for a transformation matrix, we use a rotation vector and a translation vector to express a transformation. The variable dimension at this time is exactly six dimensions.
+
+Consider a rotation represented by $ \bm{R} $. If described by a rotation vector, assuming that the rotation axis is a unit length vector $ \bm{n} $ and the angle is $ \theta $, then the vector $ \theta \bm{n} $ can also describe this rotation. So, we have to ask, what is the connection between the two expressions? In fact, it is not difficult to derive their conversion relationship. The conversion process from the rotation vector to the rotation matrix is shown by \textbf{Rodrigues's Formula}. Since the derivation process is more complicated, it is not described here. Only the result of the conversion is given. \footnote{For interested readers, please refer to \url{https://en.wikipedia.org/wiki/Rodrigues \% 27_rotation_formula}, in fact the next chapter will give a proof from the Lie algebra level. }:
+
+\begin{equation}
+\label{eq:rogridues}
+\ bm{R} = \cos \theta \bm{I} + \left({ 1 - \cos \theta } \right) \bm{n} { \bm {n} ^ \mathrm{T} } + \sin \theta { \bm{n}^ \wedge }.
+\end{equation}
+
+The symbol $ ^ \wedge $ is a vector to anti-symmetric conversion, see the formula \eqref{eq:cross}. Conversely, we can also calculate the conversion from a rotation matrix to a rotation vector. For the corner $ \theta $, take the \textbf{track} \footnote {see \textbf{trace} on both sides to find the sum of the diagonal elements of the matrix. },Have:
+
+\begin{equation}
+\begin{aligned}
+  \mathrm{tr} \left( \bm{R} \right) &= \cos \theta \mathop{}\!\mathrm{tr}\left( \bm{I} \right) + \left( {1 - \cos \theta } \right) \mathop{}\!\mathrm{tr} \left( { \bm{n} {\bm{n}^\mathrm{T}}} \right) + \sin \theta \mathop{}\!\mathrm{tr} ({\bm{n}^ \wedge })\\
+&= 3\cos \theta  + (1 - \cos \theta )\\
+&= 1 + 2\cos \theta .
+\end{aligned} 
+\end{equation}
+
+therefore:
+\begin{equation}
+\label{eq:R2theta}
+\theta = \arccos ( \frac{\mathrm{tr}(\bm{R}) - 1}{2}  ) .
+\end{equation}
+
+Regarding the recursive axis $ \bm{n} $ , since the vector on the rotation axis does not change after the rotation, it means:
+\begin{equation}
+\bm{R} \bm{n} = \bm{n}.
+\end{equation}
+
+Therefore, the recursive $ \bm{n} $ is the eigen vector corresponding to the matrix $ \bm{R} $ eigenvalue 1. Solving this equation and normalizing it gives the axis of rotation. The reader can also look at this equation from the geometrical point of "the axis of rotation is unchanged after rotation". By the way, the two conversion formulas here will still appear in the next lecture, and you will find that they are exactly the correspondence between Lie group and Lie algebra on $ \mathrm{SO}(3) $ .
