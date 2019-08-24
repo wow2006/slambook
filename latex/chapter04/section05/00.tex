@@ -1,0 +1,73 @@
+\section{\textsuperscript{\ttfamily *}similar transformation group and Lie algebra}
+
+Finally, we would like to mention the similar transform group $\mathrm{Sim}(3)$ used in monocular vision, and the corresponding Lie algebra $\mathfrak{sim}(3)$. If you are only interested in binocular SLAM or RGB-D SLAM, you can skip this section.
+
+We have already introduced single-scale scale uncertainty. If $\mathrm{SE}(3)$ is used in the monocular SLAM to represent the pose, then the scale in the entire SLAM process will change due to scale uncertainty and scale drift, which is at $\mathrm{SE}( 3) $ is not reflected. Therefore, in the case of monocular we generally express the scale factor explicitly. In mathematical terms, for the point $\bm{p}$ in space, a \textbf{similar transformation} is passed in the camera coordinate system instead of the Euclidean transformation:
+
+\begin{equation}\label{key}
+\bm{p}' = \left[ {\begin{array}{*{20}{c}}
+	{s\bm{R}}&\bm{t}\\
+	{{\bm{0}^\mathrm{T}}}&1
+	\end{array}} \right] \bm{p}
+= s\bm{R} \bm{p} + \bm{t}.
+\end{equation}
+
+In the similar transformation, we express the scale $s$. It also acts on top of the three coordinates of $\bm{p}$ and scales $\bm{p}$ once. Similar to $\mathrm{SO}(3)$, $\mathrm{SE}(3)$, the similarity transform also forms a group on matrix multiplication, called the similarity transform group $\mathrm{Sim}(3)$:
+
+\begin{equation}\label{key}
+\mathrm{Sim}(3) = \left\{ { \bm{S} = \left[ {\begin{array}{*{20}{c}}
+		{s\bm{R}}& \bm{t}\\
+		{{\bm{0}^\mathrm{T}}}&1
+		\end{array}} \right] \in {\mathbb{R}^{4 \times 4}}} \right\}.
+\end{equation}
+
+Similarly, $\mathrm{Sim}(3)$ also has corresponding Lie algebra, exponential mapping, logarithmic mapping, and so on. The Lie algebra $\mathfrak{sim}(3)$ element is a 7-dimensional vector $\boldsymbol{\zeta}$. Its first 6 dimensions are the same as $\mathfrak{se}(3)$, and finally a $\sigma$.
+
+%\clearpage
+\begin{equation}
+\mathfrak{sim} \left( 3 \right) = \left\{ { \boldsymbol{\zeta} | \boldsymbol{\zeta}  = \left[ \begin{array}{l}
+	\boldsymbol{\rho} \\
+	\boldsymbol{\phi} \\
+	\sigma
+	\end{array} \right] \in { \mathbb{R}^7},{ \boldsymbol{\zeta} ^ \wedge } = \left[ {\begin{array}{*{20}{c}}
+		{\sigma \bm{I} + {\boldsymbol{\phi} ^ \wedge }}&\boldsymbol{\rho} \\
+		{{\bm{0}^\mathrm{T}}}&0
+		\end{array}} \right] \in {\mathbb{R}^{4 \times 4}}} \right\}.
+\end{equation}
+
+It has a $\sigma$ more than $\mathfrak{se}(3)$. The associated $\mathrm{Sim}(3)$ and $\mathfrak{sim}(3)$ are still index maps and log maps. Index mapping to
+
+\begin{equation}
+\exp \left( {{ \boldsymbol{\zeta} ^ \wedge }} \right) = \left[ {\begin{array}{*{20}{c}}
+	{{\mathrm{e}^\sigma }\exp \left( {{ \boldsymbol{\phi} ^ \wedge }} \right)}&{ \bm{J}_s \boldsymbol{\rho} }\\
+	{{\bm{0}^\mathrm{T}}}&1
+	\end{array}} \right].
+\end{equation}
+
+Where $\bm{J}_s$ is in the form
+
+\begin{align*}
+%\begin{array}{ll}
+{ \bm{J}_s} =& \frac{{{\mathrm{e}^\sigma } - 1}}{\sigma } \bm{I} + \frac{ \sigma {{\mathrm{e}^\sigma }\sin \theta  + \left( {1 - {\mathrm{e}^\sigma }\cos \theta } \right)\theta }}{{{\sigma ^2} + {\theta ^2}}}{\bm{a}^ \wedge }\\
+&+ \left( {\frac{{{\mathrm{e}^\sigma } - 1}}{\sigma } - \frac{{\left( {{\mathrm{e}^\sigma }\cos \theta  - 1} \right)\sigma  + ({\mathrm{e}^\sigma }\sin \theta )\theta }}{{{\sigma ^2} + {\theta ^2}}}} \right){\bm{a}^ \wedge }{\bm{a}^ \wedge }.
+%\end{array}
+\end{align*}
+
+Through index mapping, we can find the relationship between Lie algebra and Lie group. For the Lie algebra $\boldsymbol{\zeta}$, its correspondence with Lie group is:
+
+\begin{equation}
+s=\mathrm{e}^\sigma, \; \bm{R} = \exp( \boldsymbol{\phi} ^\wedge), \; \bm{t} = \bm{J}_s \boldsymbol{\rho}.
+\end{equation}
+
+The rotation is consistent with $\mathrm{SO}(3)$. In the panning section, you need to multiply a Jacobian $\bm{\mathcal{J}}$ in $\mathfrak{se}(3)$, and the similarly transformed Jacobi is more complicated. For the scale factor, you can see that $s$ in the Lie group is the exponential function of $\sigma$ in the Lie algebra.
+
+The BCH approximation of $\mathrm{Sim}(3)$ is similar to $\mathrm{SE}(3)$. We can discuss a derivative of $\bm{S}$ after a similar transformation of $\bm{S} \bm{p}$ relative to $\bm{S}$. Similarly, there are two ways of differential model and perturbation model, and the perturbation model is simple. We omit the derivation process and directly give the results of the perturbation model. Let $\bm{S} \bm{p}$ a small perturbation $\exp( \boldsymbol{\zeta} ^\wedge )$ on the left and ask for $\bm{S} \bm{p}$ The derivative of the disturbance. Since $\bm{S} \bm{p}$ is a 4-dimensional homogeneous coordinate, $\boldsymbol{\zeta}$ is a 7-dimensional vector, which should be $4 \times 7$ for Jacobian. For convenience, remember the first 3 dimensional composition vector $\bm{q}$ of $\bm{Sp}$, then:
+
+\begin{equation}
+\frac{{\partial \bm{Sp}}}{{\partial \boldsymbol{\zeta} }} = \left[ {\begin{array}{*{20}{c}}
+	\bm{I} &{ - {\bm{q}^ \wedge }}& \bm{q} \\
+	{{\bm{0}^\mathrm{T}}} & {{ \bm{0}^\mathrm{T}}}&0
+	\end{array}} \right].
+\end{equation}
+
+About $\mathrm{Sim}(3)$, we will introduce it here. For more detailed information on $\mathrm{Sim}(3)$, readers are encouraged to refer to the literature \cite{Strasdat2012a}.
