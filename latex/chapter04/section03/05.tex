@@ -1,0 +1,48 @@
+\subsection{$\mathrm{SE}(3)$Lie algebra on the guide}
+\label{sec:se3-diff}
+
+Finally, we give the perturbation model on $\mathrm{SE}(3)$, and the derivation on the direct Lie algebra is not introduced. Suppose a space point $\bm{p}$ is transformed by $\bm{T}$ (corresponding to Lie algebra is $\boldsymbol{\xi}$), and you get $\bm{Tp}$\footnote{please note that To make multiplication, $\bm{p}$ must use homogeneous coordinates. }. Now, give $\bm{T}$ left by a perturbation $\Delta \bm{T} = \exp \left( \delta \boldsymbol{\xi}^\wedge \right)$, we set the perturbation of the Li The algebra is $\delta \boldsymbol{\xi} = [\delta \boldsymbol{\rho}, \delta \boldsymbol{\phi}]^\mathrm{T}$, then:
+
+\begin{align*}
+\frac{{\partial \left( \bm{Tp} \right)}}{{\partial \delta \boldsymbol{\xi}}} &= \mathop {\lim }\limits_{\delta \boldsymbol{\xi}  \to \bm{0}} \frac{{\exp \left( {\delta {\boldsymbol{\xi} ^ \wedge }} \right)\exp \left( {{\boldsymbol{\xi} ^ \wedge }} \right) \bm{p} - \exp \left( {{\boldsymbol{\xi} ^ \wedge }} \right) \bm{p} }}{{\delta \boldsymbol{\xi} }}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\xi}  \to \bm{0}} \frac{{\left( { \bm{I} + \delta {\boldsymbol{\xi} ^ \wedge }} \right)\exp \left( {{\boldsymbol{\xi} ^ \wedge }} \right) \bm{p} - \exp \left( {{\boldsymbol{\xi} ^ \wedge }} \right) \bm{p} }}{{\delta {\boldsymbol{\xi} }}}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\xi}  \to \bm{0}} \frac{{\delta {\boldsymbol{\xi} ^ \wedge }\exp \left( {{\boldsymbol{\xi} ^ \wedge }} \right) \bm{p}}}{{\delta {\boldsymbol{\xi} }}}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\xi}  \to \bm{0}} 
+\frac{{\left[ {\begin{array}{*{20}{c}}
+			{\delta { \boldsymbol{\phi} ^ \wedge }}&{\delta {\boldsymbol{\rho} }}\\
+			{{\bm{0}^\mathrm{T}}}&0
+			\end{array}} \right]\left[ {\begin{array}{*{20}{c}}
+			{\bm{Rp} + \bm{t}}\\
+			1
+			\end{array}} \right]}}{{\delta {\boldsymbol{\xi} }}}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\xi}  \to \bm{0}} \frac{{\left[ {\begin{array}{*{20}{c}}
+			{\delta {\boldsymbol{\phi} ^ \wedge }\left( {\bm{Rp} + \bm{t}} \right) + \delta {\boldsymbol{\rho} }}\\
+			\bm{0}^\mathrm{T}
+			\end{array}} \right]}}{[\delta\boldsymbol{\rho},\delta \boldsymbol{\phi}]^\mathrm{T}} = \left[ {\begin{array}{*{20}{c}}
+	\bm{I} & { - {{\left( {\bm{Rp} + \bm{t}} \right)}^ \wedge }} \\
+	{{\bm{0}}}^\mathrm{T} & \bm{0}^\mathrm{T}
+	\end{array}} \right] \buildrel \Delta \over = {\left( \bm{Tp} \right)^ \odot }.
+\end{align*}
+
+We define the final result as an operator $^\odot$\footnote{I will read it as "Boom", like a stone falling into the well. }, which transforms a spatial point of homogeneous coordinates into a matrix of $4 \times 6$. This equation requires a little explanation of the order of matrix derivation, assuming that $\bm{a}, \bm{b}, \bm{x}, \bm{y}$ are column vectors, then in our symbol Under the writing method, there are the following rules:
+
+\begin{equation}
+\frac{\mathrm{\mathrm{d}}\begin{bmatrix}
+	\bm{a}\\
+	\bm{b}
+	\end{bmatrix}}{{\mathrm{d} \begin{bmatrix}
+		\bm{x}\\
+		\bm{y}
+		\end{bmatrix}}} = {\left( \frac{\mathrm{d}[\bm{a},\bm{b}]^\mathrm{T}}{{\mathrm{d}\begin{bmatrix}
+			\bm{x}\\
+			\bm{y}
+			\end{bmatrix}}} \right)^\mathrm{T}} = {{\begin{bmatrix}
+		{\frac{{\mathrm{d}\bm{a}}}{{\mathrm{d}\bm{x}}}}&{\frac{{\mathrm{d}\bm{b}}}{{\mathrm{d}\bm{x}}}}\\
+		{\frac{{\mathrm{d}\bm{a}}}{{\mathrm{d}\bm{y}}}}&{\frac{{\mathrm{d}\bm{b}}}{{\mathrm{d}\bm{y}}}}
+		\end{bmatrix}} ^\mathrm{T}} = {\begin{bmatrix}
+	{\frac{{\mathrm{d}\bm{a}}}{{\mathrm{d}\bm{x}}}}&{\frac{{\mathrm{d}\bm{a}}}{{\mathrm{d}\bm{y}}}}\\
+	{\frac{{\mathrm{d}\bm{b}}}{{\mathrm{d}\bm{x}}}}&{\frac{{\mathrm{d}\bm{b}}}{{\mathrm{d}\bm{y}}}}
+	\end{bmatrix}}
+\end{equation}
+
+So far, we have introduced the differential operation on Lie group Lie algebra. In the following chapters, we will apply this knowledge to solve practical problems. As for some important mathematical properties of Lie group Lie algebra, we leave it to the reader as an exercise.
