@@ -1,0 +1,198 @@
+\section{Liqun and Lie algebra basis}
+
+In the last lecture, we introduced the definition of the rotation matrix and the transformation matrix. At the time, we said that the three-dimensional rotation matrix constitutes \textbf{special orthogonal group}$\mathrm{SO}(3)$, and the transformation matrix constitutes \textbf{special Euclidean group}$\mathrm{SE}(3) $. They are written like this:
+\begin{equation}
+\mathrm{SO}(3) = \{ \bm{R} \in \mathbb{R}^{3 \times 3} | \bm{RR}^\mathrm{T} = \bm{I}, \ Det(\bm{R})=1 \}.
+\end{equation}
+\begin{equation}
+\mathrm{SE}(3) = \left\{ \bm{T} = \left[ {\begin{array}{*{20}{c}}
+  \bm{R} & \bm{t} \\
+  {{\bm{0}^\mathrm{T}}} & 1
+  \end{array}} \right]
+  \in \mathbb{R}^{4 \times 4} | \bm{R} \in \mathrm{SO}(3), \bm{t} \in \mathbb{R}^3\right\}.
+  \end{equation}
+
+  However, at the time we did not explain the meaning of \textbf{group} in detail. Careful readers should note that the rotation matrix is ​​also good, the transformation matrix is ​​also good, \textbf{they are not closed to the addition}. In other words, for any two rotation matrices $\bm{R}_1, \bm{R}_2$, according to the definition of matrix addition, and no longer a rotation matrix:
+  \begin{equation}
+  \bm{R}_1 + \bm{R}_2 \notin \mathrm{SO}(3), \quad \bm{T}_1 + \bm{T}_2 \notin \mathrm{SE}(3).
+  \end{equation}
+  You can also say that the two matrices do not have a well-defined addition, or usually the matrix addition is not closed to the two sets. In contrast, they have only one better operation: multiplication. $\mathrm{SO}(3)$ and $\mathrm{SE}(3)$About multiplication is closed:
+  \begin{equation}
+  \bm{R}_1 \bm{R}_2 \in \mathrm{SO}(3), \quad \bm{T}_1 \bm{T}_2 \in \mathrm{SE}(3).
+  \end{equation}
+  At the same time we can also invert any of the rotation or transformation matrices (in the sense of multiplication). We know that multiplication corresponds to a composite of rotation or transformation, and multiplication of two rotation matrices means that two rotations have been made. For this set of only one (good) operation, we call it \textbf{group}.
+
+\subsection{群}
+  
+  
+  Next we need to touch a little bit about abstract algebra. I think this is a necessary condition for discussing Li Qun's Lie algebra, but in fact, except for the students of mathematics and physics, most of the students will not be exposed to this knowledge in undergraduate study. So let's look at some basic knowledge first.
+
+  A group is an algebraic structure of \textbf{a collection} plus \textbf{an operation}. We record the collection as $A$ and the operation as $\cdot$, then the group can be recorded as $G=(A,\cdot)$. The group requires this operation to satisfy the following conditions:
+
+  \begin{enumerate}
+  \item { \emph{closed}}: $ \quad \forall a_1, a_2 \in A, \quad a_1 \cdot a_2 \in A$.
+  \item { \emph{binding law}}: $ \quad \forall a_1, a_2, a_3 \in A, \quad (a_1 \cdot a_2) \cdot a_3 = a_1 \cdot ( a_2 \cdot a_3) $.
+  \item { \emph{幺元}}: $ \quad \exists a_0 \in A, \quad \mathrm{st} \quad \forall a \in A, \quad a_0 \cdot a = a \cdot a_0 = a $.
+  \item { \emph{reverse}}: $ \quad \forall a \in A, \quad \exists a^{-1} \in A, \quad st \quad a \cdot a^{-1} = a_0 $.
+  \end{enumerate}
+
+  The reader can be recorded as "sealing hiccups"\footnote{harmony "Feng sister bites you". }. It is easy to verify that the rotation matrix set and the matrix multiplication form a group, and the same transformation matrix and matrix multiplication also form a group (so they can be called a rotation matrix group and a transformation matrix group). Other common groups include the addition of integers $(\mathbb{Z}, +)$, multiplication of rational numbers after removing 0 (幺 is 1) $(\mathbb{Q}\backslash 0, \cdot )$, etc. Wait. Common groups in the matrix are:
+
+  \begin{itemize}
+  \item \emph{general linear group $\mathrm{GL}(n)$} \quad refers to the invertible matrix of $n \times n$, which are grouped into matrix multiplications.
+
+  \item \emph{Special Orthogonal Group $\mathrm{SO}(n)$} \quad is also called the rotation matrix group, where $\mathrm{SO}(2)$ and $\mathrm{SO}(3 ) $ is the most common.
+
+  \item \emph{Special Euclidean group $\mathrm{SE}(n)$} \quad is also the $n$dimensional transformation described earlier, such as $\mathrm{SE}(2)$ and $\ Mathrm{SE}(3)$.
+  \end{itemize}
+
+  The group structure guarantees that the operations on the group have good properties, and the group theory is the theory that studies the various structures and properties of the group. Readers interested in group theory can refer to any of the recent algebra textbooks. \textbf{李群} refers to a group with continuous (smooth) properties. Discrete groups like the integer group $\mathbb{Z}$ have no continuous nature, so they are not Lie groups. And $\mathrm{SO}(n)$ and $\mathrm{SE}(n)$ are contiguous in real space. We can intuitively imagine that a rigid body can move continuously in space, so they are all Lie. Since $\mathrm{SO}(3)$ and $\mathrm{SE}(3)$ are especially important for camera pose estimation, we mainly discuss these two Lie groups. However, strictly discussing the concepts of “continuous” and “smooth” requires knowledge of analysis and topology, but we are not mathematics books, so only some important conclusions directly related to SLAM are introduced. If the reader is interested in the theoretical nature of Li Qun, please refer to the document \cite{Varadarajan2013}.
+
+  Li Qun and Lie algebra usually have two ideas to introduce. The first is to directly introduce Lie group and Lie algebra, and then tell the reader that each Lie group corresponds to a fact such as Lie algebra, but in this case, the reader will think that Lie algebra seems to be a symbol that descends from the sky, and does not know what physical meaning it has. . So, I am going to take a little time to draw the Lie algebra from the rotation matrix, similar to the practice of \cite{Ma2012}. Let's start with the simpler $\mathrm{SO}(3)$, leading to the Lie algebra $\mathfrak{so}(3)$ above $\mathrm{SO}(3)$.
+
+  \subsection{Leading of Lie algebra}
+  
+  
+  Considering the arbitrary rotation matrix $\bm{R}$, we know that it satisfies:
+  \begin{equation}
+  \bm{R} \bm{R}^\mathrm{T}=\bm{I}.
+  \end{equation}
+  Now, we say that $\bm{R}$ is the rotation of a camera that changes continuously over time, which is a function of time: $\bm{R}(t)$. Since it is still a rotation matrix, there is
+  \[
+    \bm{R}(t) \bm{R}(t) ^T = \bm{I}.
+    \]
+    Deriving time on both sides of the equation yields:
+    \[
+      \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} + \bm{R} (t) \bm{\dot{R}} {(t) ^\mathrm{T}} = 0.
+      \]
+      Finished up:
+      \begin{equation}
+      \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} = - \left( \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} \right)^\mathrm{T} .
+      \end{equation}
+
+      It can be seen that $\bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}}$ is a \textbf{antisymmetric} matrix. Recall that we introduced the $^\wedge$ symbol when we introduced the cross product in the form \eqref{eq:cross}, turning a vector into an antisymmetric matrix. Similarly, for any antisymmetric matrix, we can also find a unique vector corresponding to it. Let this operation be represented by the symbol $^{\vee}$:
+      \begin{equation}
+{\bm{a}^ \wedge } = \bm{A} = \left[ {\begin{array}{*{20}{c}}
+  0&{ - {a_3}}&{{a_2}}\\
+  {{a_3}}&0&{ - {a_1}}\\
+  { - {a_2}}&{{a_1}}&0
+  \end{array}} \right], \quad
+{ \bm{A}^ \vee } = \bm{a}.
+\end{equation}
+
+So, since $\bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}}$ is an antisymmetric matrix, we can find a three-dimensional vector $\boldsymbol{\ Philip} (t) \in \mathbb{R}^3$ corresponds to it:
+\[
+  \bm{ \dot{R} } (t) \bm{R}(t)^\mathrm{T} = \boldsymbol{\phi} (t) ^ {\wedge}.
+  \]
+
+  Multiply the two sides of the equation by $\bm{R}(t)$, since $\bm{R}$ is an orthogonal matrix, there are:
+  \begin{equation}
+  \label{eq:dR}
+  \bm{ \dot{R} } (t) = \boldsymbol{\phi} (t)^{\wedge} \bm{R}(t) =
+  \left[ {\begin{array}{*{20}{c}}
+    0&{ - {\phi _3}}&{{\phi _2}}\\
+    {{\phi _3}}&0&{ - {\phi _1}}\\
+    { - {\phi _2}}&{{\phi _1}}&0
+    \end{array}} \right] \bm{R} (t).
+    \end{equation}
+
+    You can see that each pair of rotation matrices takes a derivative, just by multiplying a $\boldsymbol{\phi}^\wedge (t)$ matrix. Consider the time $t_0=0$, and set the rotation matrix to $\bm{R}(0) = \bm{I}$. According to the derivative definition, $\bm{R}(t)$ can be used to perform a first-order Taylor expansion around $t=0$:
+    \begin{equation}
+    \begin{aligned}
+    \bm{R} \left( t \right) & \approx \bm{R} \left( t_0 \right) + \dot {\bm{R}} \left( {{t_0}} \right)\left ( {t - {t_0}} \right)\\
+      &= \bm{I} + \boldsymbol{\phi} {\left( {{t_0}} \right)^ \wedge } \left( t \right).
+      \end{aligned}
+      \end{equation}
+
+      We see that $\boldsymbol{\phi}$ reflects the derivative nature of $\bm{R}$, so it is said to be on the Tangent Space near the origin of $\mathrm{SO}(3)$. Also near $t_0$, set $\boldsymbol{\phi}$ to be a constant $\boldsymbol{\phi}(t_0) = \boldsymbol{\phi}_0$. Then according to the formula \eqref{eq:dR}, there are:
+      \[
+        \bm{ \dot{R} } (t) = \boldsymbol{\phi} (t_0) ^ {\wedge} \bm{R}(t) = \boldsymbol{\phi}_0^ {\wedge} \bm {R}(t).
+        \]
+
+        The above formula is a differential equation for $\bm{R}$, and has an initial value of $\bm{R}(0) = \bm{I}$.
+        \begin{equation}
+        \label{eq:so3ode}
+        \bm{R}(t) = \exp \left( \boldsymbol{\phi}_0^\wedge t \right).
+        \end{equation}
+
+        The reader can verify that the above equation holds for both the differential equation and the initial value. This means that around $t = 0$, the rotation matrix can be calculated from $\exp \left( \boldsymbol{\phi}_0^\wedge t \right)$\footnote{At this point we have not explained $\exp$ How it works. We will see its definition and calculation process right away. }. We see that the rotation matrix $\bm{R}$ is associated with another antisymmetric matrix $\boldsymbol{\phi}_0^\wedge t$ through an exponential relationship. But what is the index of the matrix? Here we have two questions that need to be clarified:
+
+        \begin{enumerate}
+        \item Given $\bm{R}$ at a certain moment, we can find a $\boldsymbol{\phi}$ that describes the local derivative relationship of $\bm{R}$. What does $\boldsymbol{\phi}$ for $\bm{R}$ mean? We say that $\boldsymbol{\phi}$ corresponds to the Lie algebra $\mathfrak{so}(3)$ on $\mathrm{SO}(3)$;
+        \item Second, when a vector $\boldsymbol{\phi}$ is given, how is the matrix index $\exp (\boldsymbol{\phi} ^\wedge )$ calculated? Conversely, given $\bm{R}$, can there be an opposite operation to calculate $\boldsymbol{\phi}$? In fact, this is the exponential/logarithmic mapping between Lie group and Lie algebra.
+        \end{enumerate}
+
+        Let's solve these two problems below.
+        
+   \subsection{The definition of Lie algebra}
+   
+   
+        Each Lie group has a Lie algebra corresponding to it. Lie algebra describes the local nature of the Lie group, and is precisely the tangent space near the unit cell. The general definition of Lie algebra is as follows:
+
+        Lie algebra consists of a collection $\mathbb{V}$, a number field $\mathbb{F}$, and a binary operation $[,]$. If they satisfy the following properties, then $(\mathbb{V}, \mathbb{F}, [,])$ is a Lie algebra, denoted as $\mathfrak{g}$.
+
+        \begin{enumerate}
+        \item{ \emph{closed} } \quad $\forall \bm{X}, \bm{Y} \in \mathbb{V}, [\bm{X}, \bm{Y}] \in \ Mathbb{V}$.
+        \item{ \emph{bilinear} } \quad $\forall \bm{X},\bm{Y},\bm{Z} \in \mathbb{V}, a,b \in \mathbb{F }, $ has:
+        \[
+          [a\bm{X}+b\bm{Y}, \bm{Z}] = a[\bm{X}, \bm{Z}] + b [ \bm{Y}, \bm{Z} ], \quad [\bm{Z}, a \bm{X}+b\bm{Y}] = a [\bm{Z}, \bm{X} ]+ b [\bm{Z},\ Bm{Y}] .
+          \]
+          \item{ \emph{reflexive}}\footnote{ Reflexive means that your own operation is zero. } \quad $\forall \bm{X} \in \mathbb{V}, [\bm{X},\bm{X}] = \bm{0}$.
+          \item { \emph{Jacobi equivalent} } \quad $\forall \bm{X},\bm{Y},\bm{Z} \in \mathbb{V}, [\bm{X}, [ \bm{Y},\bm{Z}] ] + [\bm{Z}, [\bm{X},\bm{Y}] ] + [\bm{Y}, [\bm{Z}, \bm{X}]] =\bm{0}$.
+          \end{enumerate}
+          The binary operation is called \textbf{lie brackets}. On the surface, the nature of Lie algebra is still quite a lot. Compared to the simpler binary operations in the group, the Lie brackets express the difference between the two elements. It does not require a combination of laws, but requires the element and itself to be zero after the brackets. As an example, the cross product $\times$ defined on the 3D vector $\mathbb{R}^3$ is a kind of Li brackets, so $\mathfrak{g} = (\mathbb{R}^3, \mathbb{R }, \times)$ constitutes a Lie algebra. The reader can try to substitute the properties of the cross product into the above four properties.
+
+   \subsection{李代数$\mathfrak{so}(3)$}
+   
+          The previously mentioned $\boldsymbol{\phi}$ is actually a kind of Lie algebra. The Lie algebra corresponding to $\mathrm{SO}(3)$ is a vector defined on $\mathbb{R}^3$, which we remember as $\boldsymbol{\phi}$. According to the previous derivation, each $\boldsymbol{\phi}$ can generate an antisymmetric matrix:
+          \begin{equation}
+          \label{eq:phi}
+          \boldsymbol{\varPhi} = \boldsymbol{\phi}^{\wedge} = \left[ {\begin{array}{*{20}{c}}
+            0&{ - {\phi _3}}&{{\phi _2}}\\
+            {{\phi _3}}&0&{ - {\phi _1}}\\
+            { - {\phi _2}}&{{\phi _1}}&0
+            \end{array}} \right] \in \mathbb{R}^{3 \times 3}.
+            \end{equation}
+
+            Under this definition, the two vectors $\boldsymbol{\phi}_1, \boldsymbol{\phi}_2$'s Li brackets are
+            \begin{equation}
+            [\boldsymbol{\phi}_1, \boldsymbol{\phi}_2] = \left( \bm{ \varPhi }_1 \bm{ \varPhi }_2 - \bm{ \varPhi }_2 \bm{ \varPhi }_1 \right)^\vee.
+            \end{equation}
+
+            The reader can verify that the Lie brackets under this definition satisfy the above properties. Since the vector $\boldsymbol{\phi}$ is one-to-one with the antisymmetric matrix, the element of $\mathfrak{so}(3)$ is a three-dimensional vector or a three-dimensional antisymmetric matrix without causing ambiguity. , no difference:
+            \begin{equation}
+            \mathfrak{so}(3) = \left\{ \boldsymbol{\phi} \in \mathbb{R}^3, \boldsymbol{\varPhi} = \boldsymbol{\phi^\wedge} \in \mathbb{ R}^{3 \times 3} \right\}.
+            \end{equation}
+            Some books also use the symbol $\widehat{\boldsymbol{\phi}}$ to indicate opposition, but the meaning is the same. At this point, we have made clear the contents of $\mathfrak{so}(3)$. They are a set of \textbf{3D vectors}, each vector corresponding to an antisymmetric matrix, which can be used to express the derivative of the rotation matrix. Its relationship to $\mathrm{SO}(3)$ is given by the index map:
+            \begin{equation}
+            \bm{R} = \exp ( \boldsymbol{\phi}^\wedge ).
+            \end{equation}
+            The index map will be introduced later. Since we have introduced $\mathfrak{so}(3)$, we will first look at the corresponding Lie algebra on $\mathrm{SE}(3)$.
+
+   \subsection{李代数$\mathfrak{se}(3)$}
+            For $\mathrm{SE}(3)$, it also has a corresponding Lie algebra $\mathfrak{se}(3)$. To save space, I won't cover how to bring $\mathfrak{se}(3)$. Similar to $\mathfrak{so}(3)$, $\mathfrak{se}(3)$ is located in the $\mathbb{R}^6$ space:
+            \begin{equation}
+            \mathfrak{se}(3) = \left\{ { \boldsymbol{\xi} = \left[ \begin{array}{l}
+              \boldsymbol{\rho} \\
+                \boldsymbol{\phi}
+              \end{array} \right]
+                \in { \mathbb{R}^6} ,
+                \boldsymbol{\rho} \in { \mathbb{R}^3}, \boldsymbol{\phi} \in \mathfrak{so} \left( 3 \right),{ \boldsymbol{\xi} ^ \wedge } = \left[ {\begin{array}{*{20}{c}}
+                  {{ \boldsymbol{\phi} ^ \wedge }}& \boldsymbol{\rho} \\
+                  {{\bm{0}^\mathrm{T}}}&0
+                  \end{array}} \right] \in { \mathbb{R}^{4 \times 4}}} \right\}.
+                  \end{equation}
+                  We write each $\mathfrak{se}(3)$ element as $\boldsymbol{\xi}$, which is a six-dimensional vector. The first three dimensions are translation (but the meaning is different from the translation in the transformation matrix, the analysis is seen later), which is denoted as $\boldsymbol{\rho}$; after the three-dimensional rotation, it is recorded as $\boldsymbol{\phi}$, which is essentially $\mathfrak{so}(3)$Element\footnote{Please note that some places put the rotation in front and the translation in the back, it is also possible. In the program, it doesn't matter, they are stored in a structure. }. At the same time, we extended the meaning of the $^\wedge$ symbol. In $\mathfrak{se}(3)$, a six-dimensional vector is also converted to a four-dimensional matrix using the $^\wedge$ symbol, but the anti-symbol is no longer represented here:
+                  \begin{equation}
+{ \boldsymbol{\xi} ^ \wedge } = \left[ {\begin{array}{*{20}{c}}
+  {{ \boldsymbol{\phi} ^ \wedge }}& \boldsymbol{\rho} \\
+  {{\bm{0}^\mathrm{T}}}&0
+  \end{array}} \right] \in { \mathbb{R}^{4 \times 4}}.
+  \end{equation}
+
+  We still use the $^\wedge$ and $^\vee$ symbols to refer to the relationship from "vector to matrix" and "matrix to vector" to maintain consistency with $\mathfrak{so}(3)$ Sex. They are still one-to-one correspondence. The reader can simply interpret $\mathfrak{se}(3)$ as a "vector consisting of a translation plus a $\mathfrak{so}(3)$ element" (although $\boldsymbol{\rho} here) $ is not directly translated). Similarly, the Lie algebra $\mathfrak{se}(3)$ also has a Lee bracket similar to $\mathfrak{so}(3)$:
+  \begin{equation}
+  [ \boldsymbol{\xi}_1, \boldsymbol{\xi}_2 ] = \left( \boldsymbol{\xi}_1^\wedge \boldsymbol{\xi}_2^\wedge -\boldsymbol{\xi}_2^ \wedge \boldsymbol{\xi}_1^\wedge \right) ^\vee.
+  \end{equation}
+
+  The reader can verify that it satisfies the definition of Lie algebra (reserved as an exercise). So far we have seen two important Lie algebras $\mathfrak{so}(3)$ and $\mathfrak{se}(3)$.

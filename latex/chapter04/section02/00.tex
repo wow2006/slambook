@@ -1,0 +1,33 @@
+\subsection{group}
+Next we need to touch a little bit about abstract algebra.
+I think this is a necessary condition for discussing Li Qun's Lie algebra, but in fact, except for the students of mathematics and physics, most of the students will not be exposed to this knowledge in undergraduate study.
+So let's look at some basic knowledge first.
+
+Group is the algebraic structure of \textbf{a collection} plus \textbf{an operation}.
+We record the collection as $ A $ and the operation as $ \cdot $ , then the group can be recorded as $ G=(A, \cdot ) $ .
+The group requires this operation to satisfy the following conditions:
+
+\begin{enumerate}
+\item { \emph{closed}}:          $ \quad \forall a_1, a_2 \in A, \quad a_1 \cdot a_2 \in A$.
+\item { \emph{Combination law}}: $ \quad \forall a_1, a_2, a_3 \in A, \quad (a_1 \cdot a_2) \cdot a_3 = a_1 \cdot ( a_2 \cdot a_3) $.
+\item { \emph{Qian Yuan}}:       $ \quad \exists a_0 \in A, \quad \mathrm{s.t.} \quad \forall a \in A, \quad a_0 \cdot a = a \cdot a_0 = a $.
+\item { \emph{Reverse}}:         $ \quad \forall a \in A, \quad \exists a^{-1} \in A, \quad s.t. \quad a \cdot a^{-1} = a_0 $.
+\end{enumerate}
+
+The reader can be recorded as "sealing hiccups" \footnote{harmonic "Feng sister bites you".}.
+It is easy to verify that the rotation matrix set and the matrix multiplication form a group, and the same transformation matrix and matrix multiplication also form a group (so they can be called a rotation matrix group and a transformation matrix group). Other common groups include the addition of integers $ ( \mathbb {Z}, +) $ , multiplication of rational numbers after removing 0 $ ( \mathbb {Q} \backslash  0 , \cdot ) $ , etc. Wait. Common groups in the matrix are:
+
+\begin{itemize}
+\item  \emph {general linear group $ \mathrm {GL}(n) $ } \quad refers to the reversible matrix of $ n \times n $ , which are grouped by matrix multiplication.
+
+\item  \emph {Special Orthogonal Group $ \mathrm {SO}(n) $ } \quad is also called the rotation matrix group, where $ \mathrm {SO}( 2 ) $ and $ \mathrm {SO}( 3 ) $ is the most common.
+
+\item  \emph {Special Euclidean group $ \mathrm {SE}(n) $ } \quad is also the $ n $ dimensional transformation mentioned earlier , such as $ \mathrm {SE}( 2 ) $ and $ \ Mathrm {SE}( 3 ) $ .
+\end{itemize}
+
+The group structure guarantees that the operations on the group have good properties, and the group theory is the theory that studies the various structures and properties of the group. Readers interested in group theory can refer to any of the recent algebra textbooks. \textbf{Li Qun} refers to a group with continuous (smooth) properties. Discrete groups like the integer group $ \mathbb {Z} $ have no continuous nature, so they are not Lie groups. And $ \mathrm {SO}(n) $ and $ \mathrm {SE}(n) $ are contiguous in real space. We can intuitively imagine that a rigid body can move continuously in space, so they are all Lie. Since $ \mathrm {SO}( 3 ) $ and $ \mathrm {SE}( 3 ) $ are especially important for camera pose estimation, we mainly discuss these two Lie groups. However, strictly discussing the concepts of “continuous” and “smooth” requires knowledge of analysis and topology, but we are not mathematics books, so only some important conclusions directly related to SLAM are introduced. If the reader is interested in the theoretical nature of Li Qun, please refer to the document \cite {Varadarajan2013}.
+
+Li Qun and Lie algebra usually have two ideas to introduce.
+The first is to directly introduce Lie group and Lie algebra, and then tell the reader that each Lie group corresponds to a fact such as Lie algebra, but in this case, the reader will think that Lie algebra seems to be a symbol that descends from the sky, and does not know what physical meaning it has.
+So, I am going to take a little time to draw the Lie algebra from the rotation matrix, similar to the practice of \cite{Ma2012}.
+Let's start with a simpler $ \mathrm {SO}( 3 ) $ to bring up $ \mathrm {SO}( 3 ) $ above the Lie algebra $ \mathfrak {so}( 3 ) $ .
