@@ -1,0 +1,25 @@
+\enlargethispage{9pt}
+\subsection{$\mathrm{SO}(3)$Derivation on Lie Algebra}
+Let's discuss how a function with Lie algebras can be used to derive the Lie algebra. This issue has a strong practical background. In SLAM, we estimate the position and attitude of a camera, which is described by the rotation matrix on $\mathrm{SO}(3)$ or the transformation matrix on $\mathrm{SE}(3)$ . Let's set the position of the small radish at a certain moment as $\bm{T}$. It observes a point where the world coordinates are at $\bm{p}$ and produces an observation of $\bm{z}$. Then, by the coordinate transformation relationship:
+%\clearpage
+\begin{equation}
+\bm{z} = \bm{T} \bm{p} + \bm{w}.
+\end{equation}
+Where $\bm{w}$ is random noise. Because of its existence, $\bm{z}$ often does not accurately satisfy the relationship of $\bm{z} = \bm{T} \bm{p}$. Therefore, we usually calculate the error between the ideal observation and the actual data:
+\begin{equation}
+\bm{e} = \bm{z} - \bm{T} \bm{p}.
+\end{equation}
+
+Suppose there are a total of $N$ such landmarks and observations, so there is $N$ above. Then, the estimation of the position of the radish is equivalent to finding an optimal $\bm{T}$, which minimizes the overall error:
+\begin{equation}
+\mathop {\min }\limits_{\bm{T}} J(\bm{T} ) = \sum_{i=1}^{N} \left\| {\bm{z}_i - \bm{ Tp}_i} \right\|^2_2.
+\end{equation}
+
+To solve this problem, we need to calculate the derivative of the objective function $J$ on the transformation matrix $\bm{T}$. Let's leave the specific algorithm behind. The point here is that \textbf{we often build pose-related functions and then discuss the function's derivatives on poses to adjust the current estimate}. However, $\mathrm{SO}(3), \mathrm{SE}(3)$ does not have well-defined additions, they are just groups. If we treat $\bm{T}$ as a normal matrix to handle optimization, we must constrain it. From the perspective of Lie algebra, since Lie algebra consists of vectors, it has a good addition operation. Therefore, there are two ways to solve the problem of derivation using Lie algebra:
+
+\begin{enumerate}
+	\item uses Lie algebra to represent the pose, and then derives the \textbf{Lie algebra} according to the Lie algebra addition.
+	\item is a small perturbation of Lie group \textbf{left multiplication} or \textbf{right multiplication}, and then deriving the \textbf{disturbance}, called the left perturbation and the right perturbation model.
+\end{enumerate}
+
+The first method corresponds to the derivation model of the Lie algebra, and the second corresponds to the perturbation model. Let's discuss the similarities and differences between the two ideas.

@@ -1,0 +1,61 @@
+\subsection{$\mathrm{SO}(3)$ Exponential mapping}
+
+Now consider the second question: How to calculate $\exp ( \boldsymbol{\phi}^{\wedge} )$? Obviously it is an index of a matrix. In Lie group and Lie algebra, it is called an Exponential Map. Again, we will first discuss the exponential mapping of $\mathfrak{so}(3)$ and then discuss the case of $\mathfrak{se}(3)$.
+
+The exponential mapping of an arbitrary matrix can be written as a Taylor expansion, but only if there is a convergence, the result is still a matrix:
+
+\begin{equation}
+\exp(\bm{A}) = \sum\limits_{n = 0}^\infty {\frac{1}{{n!}}{ \bm{A}^n}}.
+\end{equation}
+
+Similarly, for any element in $\mathfrak{so}(3)$, $\boldsymbol{\phi}$, we can also define its index mapping in this way:
+
+\begin{equation}
+\exp(\boldsymbol{\phi}^\wedge) = \sum\limits_{n = 0}^\infty {\frac{1}{{n!}}{ (\boldsymbol{\phi}^{\wedge })^n}}.
+\end{equation}
+
+But this definition cannot be calculated directly because we don't want to calculate the infinite power of the matrix. Below we derive a convenient way to calculate the exponential mapping. Since $\boldsymbol{\phi}$ is a three-dimensional vector, we can define its modulus length and its direction, respectively denoted as $\theta$ and $\bm{a}$, so there is $\boldsymbol{\phi} = \theta \bm{a}$. Here $\bm{a}$ is a direction vector of length 1, ie $\| \bm{a} \| =1$. First, for $\bm{a}^\wedge$, there are two properties: % TODO The concrete form of the two expressions
+
+\begin{equation}
+\bm{a}^{\wedge} \bm{a}^{\wedge} = \left[ {\begin{array}{*{20}{c}}
+	{ - a_2^2 - a_3^2}&{{a_1}{a_2}}&{{a_1}{a_3}}\\
+	{{a_1}{a_2}}&{ - a_1^2 - a_3^2}&{{a_2}{a_3}}\\
+	{{a_1}{a_3}}&{{a_2}{a_3}}&{ - a_1^2 - a_2^2}
+	\end{array}} \right] = \bm{a} \bm{a}^\mathrm{T} - \bm{I},
+\end{equation}
+
+as well as
+
+\begin{equation}
+\bm{a}^{\wedge} \bm{a}^{\wedge} \bm{a}^{\wedge} = \bm{a}^\wedge (\bm{a}\bm{a}^\mathrm{T}-\bm{I}) = - \bm{a}^{\wedge}.
+\end{equation}
+
+These two formulas provide a way to handle the $\bm{a}^\wedge$ high-order items. We can write the index map as:
+
+\begin{align*}
+\exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right) &= \exp \left( {\theta {\bm{a}^ \wedge }} \right) = \sum\limits_{n = 0}^\infty  {\frac{1}{{n!}}{{\left( {\theta {\bm{a}^ \wedge }} \right)}^n}} \\
+&= \bm{I} + \theta {\bm{a}^ \wedge } + \frac{1}{{2!}}{\theta ^2}{\bm{a}^ \wedge }{\bm{a}^ \wedge } + \frac{1}{{3!}}{\theta ^3}{\bm{a}^ \wedge }{\bm{a}^ \wedge }{\bm{a}^ \wedge } + \frac{1}{{4!}}{\theta ^4}{\left( {{\bm{a}^ \wedge }} \right)^4} + ...\\
+&= \bm{a} {\bm{a}^\mathrm{T}} - {\bm{a}^ \wedge }{\bm{a}^ \wedge } + \theta {\bm{a}^ \wedge } + \frac{1}{{2!}}\theta^2 {\bm{a}^ \wedge }{\bm{a}^ \wedge } - \frac{1}{{3!}}{\theta ^3}{\bm{a}^ \wedge } - \frac{1}{{4!}}{\theta ^4}{\left( {{\bm{a}^ \wedge }} \right)^2} + ...\\
+&= \bm{a}{\bm{a}^\mathrm{T}} + \underbrace{\left( {\theta  - \frac{1}{{3!}}{\theta ^3} + \frac{1}{{5!}}{\theta ^5} - ...} \right)}_{\sin \theta} {\bm{a}^ \wedge } - \underbrace{\left( {1 - \frac{1}{{2!}}{\theta ^2} + \frac{1}{{4!}}{\theta ^4} - ...} \right)}_{\cos \theta}{\bm{a}^ \wedge }{\bm{a}^ \wedge }\\
+&= {\bm{a}^ \wedge }{\bm{a}^ \wedge } + \bm{I} + \sin \theta {\bm{a}^ \wedge } - \cos \theta {\bm{a}^ \wedge }{\bm{a}^ \wedge }\\
+&= (1 - \cos \theta ){\bm{a}^ \wedge }{\bm{a}^ \wedge } + \bm{I} + \sin \theta {\bm{a}^ \wedge }\\
+&= \cos \theta \bm{I} + (1 - \cos \theta )\bm{a}{\bm{a}^\mathrm{T}} + \sin \theta {\bm{a}^ \wedge }.
+\end{align*}
+
+Finally, I got a deja vu:
+
+\begin{equation}
+\exp( \theta \bm{a}^\wedge ) = \cos \theta \bm{I} + (1 - \cos \theta )\bm{a}{\bm{a}^\mathrm{T}} + \sin \theta {\bm{a}^ \wedge }.
+\end{equation}
+
+Recall the previous lesson, which is exactly the same as the Rodriguez formula, ie \eqref{eq:rogridues}. This shows that $\mathfrak{so}(3)$ is actually a space composed of the so-called \textbf{rotation vector}, and the exponential map is the Rodriguez formula. Through them, we map any vector in $\mathfrak{so}(3)$ to a rotation matrix in $\mathrm{SO}(3)$. Conversely, if you define a logarithmic map, you can also map the elements in $\mathrm{SO}(3)$ to $\mathfrak{so}(3)$:
+
+\begin{equation}
+\boldsymbol{\phi}  = \ln {\left( \bm{R} \right)^ \vee } = {\left( {\sum\limits_{n = 0}^\infty  {\frac{{{{\left( { - 1} \right)}^n}}}{{n + 1}}{{\left( { \bm{R} - \bm{I}} \right)}^{n + 1}}} } \right)^ \vee }.
+\end{equation}
+
+As with the exponential mapping, we don't have to use Taylor to expand the computational logarithmic mapping. In Lecture 3, we have already introduced how to calculate the corresponding Lie algebra according to the rotation matrix, that is, using the formula \eqref{eq:R2theta}, and use the properties of the trace to solve the rotation angle and the rotation axis separately, which is more convenient.
+
+Now, we introduce the calculation method of index mapping. Readers may ask, what is the nature of index mapping? Can I find a unique $\boldsymbol{\phi}$ for any $\bm{R}$? Unfortunately, the index map is just a full shot, not a single shot. This means that each element in $\mathrm{SO}(3)$ can find a $\mathfrak{so}(3)$ element corresponding to it; however, there may be multiple $\mathfrak{so}( 3) The elements in $ correspond to the same $\mathrm{SO}(3)$. At least for the rotation angle $\theta$, we know that multi-turn $360^\circ$ is the same as no rotation - it has periodicity. However, if we fix the rotation angle between $\pm \pi$, then the Lie group and the Lie algebra elements are one-to-one correspondence.
+
+The conclusion of $\mathrm{SO}(3)$ and $\mathfrak{so}(3)$ seems to be in our expectation. It is very similar to the rotation vector we talked about earlier, and the exponential mapping is the Rodrigues formula. The derivative of the rotation matrix can be specified by the rotation vector, which guides how to perform calculus operations in the rotation matrix.

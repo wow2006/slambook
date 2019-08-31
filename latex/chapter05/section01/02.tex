@@ -1,0 +1,75 @@
+\subsection{Leading of Lie algebra}
+Considering the arbitrary rotation matrix $\bm{R}$, we know that it satisfies:
+
+\begin{equation}
+  \bm{R} \bm{R}^\mathrm{T}=\bm{I}.
+\end{equation}
+
+Now, we say that $\bm{R}$ is the rotation of a camera that changes continuously over time, which is a function of time: $\bm{R}(t)$. Since it is still a rotation matrix, there is
+\[
+  \bm{R}(t) \bm{R}(t) ^T = \bm{I}.
+\]
+Deriving time on both sides of the equation yields:
+\[
+  \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} + \bm{R} (t) \bm{\dot{R}} {(t)^\mathrm{T}} = 0.
+\]
+Finished up:
+\begin{equation}
+  \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} = - \left(  \bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}} \right)^\mathrm{T} .
+\end{equation}
+
+It can be seen that $\bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}}$ is a \textbf{antisymmetric} matrix. Recall that we introduced the $^\wedge$ symbol when we introduced the cross product in the form \eqref{eq:cross}, turning a vector into an antisymmetric matrix. Similarly, for any antisymmetric matrix, we can also find a unique vector corresponding to it. Let this operation be represented by the symbol $^{\vee}$:
+
+\begin{equation}
+  {\bm{a}^ \wedge } = \bm{A} = \left[ {\begin{array}{*{20}{c}}
+        0&{ - {a_3}}&{{a_2}}\\
+        {{a_3}}&0&{ - {a_1}}\\
+        { - {a_2}}&{{a_1}}&0
+  \end{array}} \right], \quad
+  { \bm{A}^ \vee } = \bm{a}.
+\end{equation}
+
+So, since $\bm{\dot{R}} (t) \bm{R} {(t)^\mathrm{T}}$ is an antisymmetric matrix, we can find a three-dimensional vector $\boldsymbol{\ Philip} (t) \in \mathbb{R}^3$ corresponds to it:
+\[
+  \bm{ \dot{R} } (t) \bm{R}(t)^\mathrm{T} = \boldsymbol{\phi} (t) ^ {\wedge}.
+\]
+Multiply the two sides of the equation by $\bm{R}(t)$, since $\bm{R}$ is an orthogonal matrix, there are:
+
+\begin{equation}
+\label{eq:dR}
+\bm{ \dot{R} } (t)  = \boldsymbol{\phi} (t)^{\wedge} \bm{R}(t) =
+\left[ {\begin{array}{*{20}{c}}
+  0&{ - {\phi _3}}&{{\phi _2}}\\
+  {{\phi _3}}&0&{ - {\phi _1}}\\
+  { - {\phi _2}}&{{\phi _1}}&0
+\end{array}} \right] \bm{R} (t).
+\end{equation}
+
+You can see that each pair of rotation matrices takes a derivative, just by multiplying a $\boldsymbol{\phi}^\wedge (t)$ matrix. Consider the time $t_0=0$, and set the rotation matrix to $\bm{R}(0) = \bm{I}$. According to the derivative definition, $\bm{R}(t)$ can be used to perform a first-order Taylor expansion around $t=0$:
+
+\begin{equation}
+\begin{aligned}
+  \bm{R} \left( t \right) & \approx \bm{R} \left( t_0 \right) + \dot {\bm{R}} \left( {{t_0}} \right)\left( {t - {t_0}} \right)\\
+  &= \bm{I} + \boldsymbol{\phi} {\left( {{t_0}} \right)^ \wedge } \left( t \right).
+\end{aligned}
+\end{equation}
+
+We see that $\boldsymbol{\phi}$ reflects the derivative nature of $\bm{R}$, so it is said to be on the Tangent Space near the origin of $\mathrm{SO}(3)$. Also near $t_0$, set $\boldsymbol{\phi}$ to be a constant $\boldsymbol{\phi}(t_0) = \boldsymbol{\phi}_0$. Then according to the formula \eqref{eq:dR}, there are:
+\[
+\bm{ \dot{R} } (t) = \boldsymbol{\phi} (t_0) ^ {\wedge} \bm{R}(t) = \boldsymbol{\phi}_0^ {\wedge} \bm{R}(t).
+\]
+The above formula is a differential equation for $\bm{R}$, and has an initial value of $\bm{R}(0) = \bm{I}$.
+
+\begin{equation}
+\label{eq:so3ode}
+\bm{R}(t) = \exp \left( \boldsymbol{\phi}_0^\wedge t \right).
+\end{equation}
+
+The reader can verify that the above equation holds for both the differential equation and the initial value. This means that around $t = 0$, the rotation matrix can be calculated from $\exp \left( \boldsymbol{\phi}_0^\wedge t \right)$\footnote{At this point we have not explained $\exp$ How it works. We will see its definition and calculation process right away. }. We see that the rotation matrix $\bm{R}$ is associated with another antisymmetric matrix $\boldsymbol{\phi}_0^\wedge t$ through an exponential relationship. But what is the index of the matrix? Here we have two questions that need to be clarified:
+\begin{enumerate}
+	\item Given $\bm{R}$ at a certain moment, we can find a $\boldsymbol{\phi}$ that describes the local derivative relationship of $\bm{R}$. What does $\boldsymbol{\phi}$ for $\bm{R}$ mean? We say that $\boldsymbol{\phi}$ corresponds to the Lie algebra $\mathfrak{so}(3)$ on $\mathrm{SO}(3)$;
+	\item Second, when a vector $\boldsymbol{\phi}$ is given, how is the matrix index $\exp (\boldsymbol{\phi} ^\wedge )$ calculated? Conversely, given $\bm{R}$, can there be an opposite operation to calculate $\boldsymbol{\phi}$? In fact, this is the exponential/logarithmic mapping between Lie group and Lie algebra.
+\end{enumerate}
+
+Let's solve these two problems below.
+

@@ -1,0 +1,7 @@
+\section{Summery}
+
+This lecture introduces Lie group $\mathrm{SO}(3)$ and $\mathrm{SE}(3)$, and their corresponding Lie algebras $\mathfrak{so}(3)$ and $\mathfrak{se }(3)$. We introduce the expression and transformation of poses on them, and then through the linear approximation of BCH, we can perturb and predict the pose. This lays the theoretical foundation for the optimization of the posture afterwards, because we need to adjust the estimate of a certain pose frequently so that the corresponding error is reduced. Only after we have figured out how to adjust and update the pose can we continue to the next step.
+
+The content of this lecture may be more theoretical. After all, it is not as good as computer vision. Compared to the mathematics textbooks that explain Lie group Lie algebra, since we only care about practical content, the process is very streamlined and the speed is relatively fast. The reader must understand the contents of this chapter, which is the basis for solving many subsequent problems, especially the pose estimation part.
+
+It should be mentioned that in addition to the Lie algebra, the rotation can also be expressed by means of quaternion, Euler angle, etc., but the subsequent processing is troublesome. In practice, you can also use $\mathrm{SO}(3)$ plus panning instead of $\mathrm{SE}(3)$ to avoid some Jacobian calculations.

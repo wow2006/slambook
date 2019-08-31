@@ -1,0 +1,31 @@
+\subsection{Lie algebra $\mathfrak{so}(3)$}
+
+The previously mentioned $\boldsymbol{\phi}$ is actually a kind of Lie algebra. The Lie algebra corresponding to $\mathrm{SO}(3)$ is a vector defined on $\mathbb{R}^3$, which we remember as $\boldsymbol{\phi}$. According to the previous derivation, each $\boldsymbol{\phi}$ can generate an anti-symmetric matrix:
+
+\begin{equation}
+\label{eq:phi}
+\boldsymbol{\varPhi} = \boldsymbol{\phi}^{\wedge} = \left[ {\begin{array}{*{20}{c}}
+	0&{ - {\phi _3}}&{{\phi _2}}\\
+	{{\phi _3}}&0&{ - {\phi _1}}\\
+	{ - {\phi _2}}&{{\phi _1}}&0
+	\end{array}} \right] \in \mathbb{R}^{3 \times 3}.
+\end{equation}
+
+Under this definition, the two vectors $\boldsymbol{\phi}_1, \boldsymbol{\phi}_2$'s Li brackets are
+\begin{equation}
+[\boldsymbol{\phi}_1, \boldsymbol{\phi}_2] = \left( \bm{ \varPhi }_1 \bm{ \varPhi }_2 - \bm{ \varPhi }_2 \bm{ \varPhi }_1 \right)^\vee.
+\end{equation}
+
+The reader can verify that the Lie brackets under this definition satisfy the above properties. Since the vector $\boldsymbol{\phi}$ is one-to-one with the anti-symmetric matrix, the element of $\mathfrak{so}(3)$ is a three-dimensional vector or a three-dimensional anti-symmetric matrix without causing ambiguity. , no difference:
+
+\begin{equation}
+\mathfrak{so}(3) = \left\{ \boldsymbol{\phi} \in \mathbb{R}^3, \boldsymbol{\varPhi} = \boldsymbol{\phi^\wedge} \in \mathbb{ R}^{3 \times 3} \right\}.
+\end{equation}
+
+Some books also use the symbol $\widehat{\boldsymbol{\phi}}$ to indicate opposition, but the meaning is the same. At this point, we have made clear the contents of $\mathfrak{so}(3)$. They are a set of \textbf{3D vectors}, each vector corresponding to an anti-symmetric matrix, which can be used to express the derivative of the rotation matrix. Its relationship to $\mathrm{SO}(3)$ is given by the index map:
+
+\begin{equation}
+\bm{R} = \exp ( \boldsymbol{\phi}^\wedge ).
+\end{equation}
+
+The index map will be introduced later. Since we have introduced $\mathfrak{so}(3)$, we will first look at the corresponding Lie algebra on $\mathrm{SE}(3)$.

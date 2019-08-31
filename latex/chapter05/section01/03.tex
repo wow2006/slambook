@@ -1,0 +1,17 @@
+\subsection{The definition of Lie algebra}
+
+Each Lie group has a Lie algebra corresponding to it. Lie algebra describes the local nature of the Lie group, and is precisely the tangent space near the unit cell. The general definition of Lie algebra is as follows:
+
+Lie algebra consists of a collection $\mathbb{V}$, a number field $\mathbb{F}$, and a binary operation $[,]$. If they satisfy the following properties, then $(\mathbb{V}, \mathbb{F}, [,])$ is a Lie algebra, denoted as $\mathfrak{g}$.
+
+\begin{enumerate}
+	\item{ \emph{closed} } \quad $\forall \bm{X}, \bm{Y} \in \mathbb{V}, [\bm{X}, \bm{Y}] \in \mathbb{V}$.
+	\item{ \emph{bilinear} } \quad $\forall \bm{X},\bm{Y},\bm{Z} \in \mathbb{V}, a,b \in \mathbb{F}, $ have
+	\[
+	[a\bm{X}+b\bm{Y}, \bm{Z}] = a[\bm{X}, \bm{Z}] + b [ \bm{Y}, \bm{Z} ], \quad [\bm{Z}, a \bm{X}+b\bm{Y}] = a [\bm{Z}, \bm{X} ]+ b [\bm{Z},\bm{Y}] .
+	\]
+	\item{ \emph{reflexive}}\footnote{Reflexive means that your own operation is zero.} \quad $\forall \bm{X} \in \mathbb{V}, [\bm{X},\bm{X}] = \bm{0}$.
+	\item { \emph{Jacobi equivalent} } \quad $\forall \bm{X},\bm{Y},\bm{Z} \in \mathbb{V}, [\bm{X}, [\bm{Y},\bm{Z}] ] + [\bm{Z}, [\bm{X},\bm{Y}] ] + [\bm{Y}, [\bm{Z},\bm{X}]] =\bm{0}$.
+\end{enumerate}
+
+The binary operation is called \textbf{lie brackets}. On the surface, the nature of Lie algebra is still quite a lot. Compared to the simpler binary operations in the group, the Lie brackets express the difference between the two elements. It does not require a combination of laws, but requires the element and itself to be zero after the brackets. As an example, the cross product $\times$ defined on the 3D vector $\mathbb{R}^3$ is a kind of Li brackets, so $\mathfrak{g} = (\mathbb{R}^3, \mathbb{R }, \times)$ constitutes a Lie algebra. The reader can try to substitute the properties of the cross product into the above four properties.

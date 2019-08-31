@@ -1,0 +1,13 @@
+\begin{mdframed}  
+	\textbf{main target}
+	\begin{enumerate}
+		\item understands the concept of Lie group and Lie algebra, and grasps the representation of $\mathrm{SO}(3), \mathrm{SE}(3)$ and the corresponding Lie algebra.
+		\item understands the meaning of BCH approximation.
+		\item learns the perturbation model on Lie algebra.
+		\item uses Sophus to perform operations on Lie algebras.
+	\end{enumerate}
+\end{mdframed} 
+
+In the last lecture, we introduced the description of rigid body motion in the three-dimensional world, including rotation matrix, rotation vector, Euler angle, quaternion and so on. We focus on the representation of rotation, but in SLAM we have to estimate and optimize them in addition to the representation. Because the pose is unknown in SLAM, we need to solve the problem of "\textbf{what kind of camera pose best matches the current observation data}". A typical way is to build it into an optimization problem, solving the optimal $\bm{R}, \bm{t}$, to minimize the error.
+
+As mentioned before, the rotation matrix itself is constrained (orthogonal and the determinant is 1). When they are used as optimization variables, they introduce additional constraints that make optimization difficult. Through the transformation relationship between Lie group and Lie algebra, we hope to turn the pose estimation into an unconstrained optimization problem and simplify the solution. Considering that the reader may not have the basic knowledge of Li group Lie algebra, we will start with the most basic knowledge.

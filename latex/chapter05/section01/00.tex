@@ -1,0 +1,37 @@
+\section{Lie group and Lie algebra basis}
+In the last lecture, we introduced the definition of the rotation matrix and the transformation matrix. At the time, we said that the three-dimensional rotation matrix constitutes \textbf{special orthogonal group}$\mathrm{SO}(3)$, and the transformation matrix constitutes \textbf{special Euclidean group}$\mathrm{SE}(3) $. They are written like this:
+
+\begin{equation}
+\mathrm{SO}(3) = \{ \bm{R} \in \mathbb{R}^{3 \times 3} | \bm{R R}^\mathrm{T} = \bm{I}, \det(\bm{R})=1 \}.
+\end{equation}
+\begin{equation}
+\mathrm{SE}(3) = \left\{ \bm{T} = \left[ {\begin{array}{*{20}{c}}
+	\bm{R} & \bm{t} \\
+	{{\bm{0}^\mathrm{T}}} & 1
+	\end{array}} \right]
+\in \mathbb{R}^{4 \times 4} | \bm{R} \in \mathrm{SO}(3), \bm{t} \in \mathbb{R}^3\right\}.
+\end{equation}
+
+However, at the time we did not explain the meaning of \textbf{group} in detail. Careful readers should note that the rotation matrix is also good, the transformation matrix is also good, \textbf{they are not closed to the addition}. In other words, for any two rotation matrices $\bm{R}_1, \bm{R}_2$, according to the definition of matrix addition, and no longer a rotation matrix:
+
+\begin{equation}
+\bm{R}_1 + \bm{R}_2  \notin \mathrm{SO}(3), \quad \bm{T}_1 + \bm{T}_2  \notin \mathrm{SE}(3).
+\end{equation}
+
+You can also say that the two matrices do not have a well-defined addition, or usually the matrix addition is not closed to the two sets. In contrast, they have only one better operation: multiplication. $\mathrm{SO}(3)$ and $\mathrm{SE}(3)$About multiplication is closed:
+
+\begin{equation}
+\bm{R}_1 \bm{R}_2  \in \mathrm{SO}(3), \quad \bm{T}_1 \bm{T}_2  \in \mathrm{SE}(3).
+\end{equation}
+
+At the same time we can also invert any of the rotation or transformation matrices (in the sense of multiplication). We know that multiplication corresponds to a composite of rotation or transformation, and multiplication of two rotation matrices means that two rotations have been made. For this set of only one (good) operation, we call it \textbf{group}.
+
+\input{chapter05/section01/01.tex}
+
+\input{chapter05/section01/02.tex}
+
+\input{chapter05/section01/03.tex}
+
+\input{chapter05/section01/04.tex}
+
+\input{chapter05/section01/05.tex}

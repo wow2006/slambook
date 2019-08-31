@@ -1,0 +1,29 @@
+\subsection{Lie algebra}
+
+First, consider the situation on $\mathrm{SO}(3)$. Suppose we rotate a space point $\bm{p}$ and get $\bm{R} \bm{p}$. Now, to calculate the coordinates of the point after rotation relative to the derivative of the rotation, we informally write it as \footnote{Please note that the derivative cannot be defined by matrix differentiation, which is just a token. }:
+
+\[
+\frac{{\partial \left( {\bm{Rp}} \right)}}{{\partial \bm{R}}}.
+\]
+
+Since $\mathrm{SO}(3)$ has no addition, the derivative cannot be calculated as defined by the derivative. Let the Lie algebra corresponding to $\bm{R}$ be $\boldsymbol{\phi}$, and we will calculate \footnote{ strictly speaking. In matrix differentiation, we can only find the derivative of the row vector about the column vector. The result is a matrix. However, this book writes the derivative of the column vector to the column vector. The reader can think that the molecule is transposed first, and then the final result is transposed. This makes the formula simple, otherwise we have to add a transpose to each line of the molecule. In this sense, you can think of $\mathrm{d}(\bm{Ax})/\mathrm{d}\bm{x} = \bm{A}$. }:
+
+\[ \frac{{\partial \left( {\exp \left( \boldsymbol{\phi} ^ \wedge \right) \bm{p}} \right)}}{{\partial \boldsymbol{\phi} }}. \]
+
+%\clearpage
+According to the definition of the derivative, there are:
+\begin{align*}
+\frac{{\partial \left( {\exp \left( {{ \boldsymbol{\phi} ^ \wedge }} \right) \bm{p}} \right)}}{{\partial \boldsymbol{\phi} }} &= \mathop {\lim }\limits_{\delta \boldsymbol{\phi}  \to \bm{0}} \frac{{\exp \left( {{{\left( {\boldsymbol{\phi}  + \delta \boldsymbol{\phi} } \right)}^ \wedge }} \right) \bm{p} - \exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right)\bm{p}}}{{\delta \boldsymbol{\phi} }}\\
+& = \mathop {\lim }\limits_{\delta \boldsymbol{\phi}  \to \bm{0}} \frac{{\exp \left( {{{\left( {{\bm{J}_l}\delta \boldsymbol{\phi} } \right)}^ \wedge }} \right)\exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right) \bm{p} - \exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right) \bm{p}}}{{\delta \boldsymbol{\phi} }}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\phi}  \to \bm{0}} \frac{{\left( { \bm{I} + {{\left( {{ \bm{J}_l}\delta \boldsymbol{\phi} } \right)}^ \wedge }} \right)\exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right) \bm{p} - \exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right)\bm{p}}}{{\delta \boldsymbol{\phi} }}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\phi}  \to \bm{0}} \frac{{{{\left( {{\bm{J}_l}\delta \boldsymbol{\phi} } \right)}^ \wedge }\exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right)\bm{p}}}{{\delta \boldsymbol{\phi} }}\\
+&= \mathop {\lim }\limits_{\delta \boldsymbol{\phi}  \to \bm{0}} \frac{{ - {{\left( {\exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right)\bm{p}} \right)}^ \wedge }{\bm{J}_l}\delta \boldsymbol{\phi} }}{{\delta \boldsymbol{\phi}}} =  - {\left( {\bm{Rp}} \right)^ \wedge }{\bm{J}_l}.
+\end{align*}
+
+The approximation of the second row is a linear approximation of BCH, the third behavior is Taylor's approximation after rounding off the high-order term (but because the limit is taken, the equal sign can be written), and the fourth row to the fifth row treat the antisymmetric symbol as a cross product. , after the exchange, change the number. Thus, we derive the derivative of the rotated point relative to the Lie algebra:
+
+\begin{equation}
+\frac{{\partial \left( { \bm{Rp}} \right)}}{{\partial \boldsymbol{\phi} }} = {\left( { - \bm{Rp}} \right)^ \wedge }{\bm{J}_l}.
+\end{equation}
+
+However, since there is still a more complicated form of $\bm{J}_l$, we don't want to calculate it. The perturbation model described below provides a simpler way to calculate derivatives.

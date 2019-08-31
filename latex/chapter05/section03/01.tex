@@ -1,0 +1,76 @@
+\subsection{BCH formula and approximation}
+
+A major motivation for using Lie algebra is to optimize, and the derivative is a very necessary information in the optimization process (we will cover it in detail in Lecture 6). Let's consider a problem below. Although we have already understood the relationship between Lie group and Lie algebra on $\mathrm{SO}(3)$ and $\mathrm{SE}(3)$, but in $\mathrm{SO}(3)$ What happens to $\mathfrak{so}(3)$ in Lie algebra when two matrix multiplications are completed? Conversely, when $\mathfrak{so}(3)$ is used to add two Lie algebras, does $\mathrm{SO}(3)$ correspond to the product of the two matrices? If established, it is equivalent to:
+
+\[
+  \exp \left( {\boldsymbol{\phi} _1^ \wedge } \right)\exp \left( {\boldsymbol{\phi} _2^ \wedge } \right) = \exp \left( {{{\left( {{\boldsymbol{\phi} _1} + {\boldsymbol{\phi} _2}} \right)}^ \wedge }} \right) ?
+\]
+
+If $\boldsymbol{\phi}_1, \boldsymbol{\phi}_2$ is a scalar, then obviously this is true; but here we calculate the exponential function of \textbf{matrix} instead of the scalar exponent. In other words, we are studying whether the following formula holds:
+
+\[
+  \ln \left( \exp \left( \bm{A} \right) \exp \left( \bm{B} \right) \right) = \bm{A} + \bm{B} \; ?
+\]
+
+Unfortunately, this formula does not hold true in the matrix. The complete form of the product of the two Lie algebra indices is represented by the Baker-Campbell-Hausdorff formula (BCH formula)\footnote{ see \url{https://en.wikipedia.org/wiki/Baker-Campbell-Hausdorff\_formula}. } given. Due to the complexity of its complete form, we only give the first few items of its expansion:
+
+\begin{equation}
+  \ln \left( {\exp \left( \bm{A} \right)\exp \left( \bm{B} \right)} \right) = \bm{A} + \bm{B} + \frac{1}{2}\left[ {\bm{A}, \bm{B}} \right] + \frac{1}{{12}}\left[ {\bm{A},\left[ {\bm{A}, \bm{B}} \right]} \right] - \frac{1}{{12}}\left[ {\bm{B},\left[ {\bm{A},\bm{B}} \right]} \right] +  \cdots
+\end{equation}
+
+Where $[]$ is the brackets. The BCH formula tells us that when dealing with the product of two matrix indices, they produce some remainders consisting of Lie brackets. In particular, consider the Lie algebra on $\mathrm{SO}(3)$$\ln { \left( {\exp \left( { \boldsymbol{\phi} _1^ \wedge } \right)\exp \left ( {\boldsymbol{\phi} _2^ \wedge } \right)} \right) ^ \vee }$, when $\boldsymbol{\phi_1}$ or $\boldsymbol{\phi_2}$ is small, small Items with more than two quantities can be ignored. At this time, BCH has a linear approximation \footnote{ concrete derivation of BCH specific form and approximate expression, this book is not discussed, please refer to the document \cite{Barfoot2016}. }:
+
+\begin{equation}
+  \ln { \left( {\exp \left( { \boldsymbol{\phi} _1^ \wedge } \right)\exp \left( {\boldsymbol{\phi} _2^ \wedge } \right)} \right) ^ \vee } \approx \left\{
+    \begin{array}{l}
+      {\bm{J}_l}{\left( {{\boldsymbol{\phi} _2}} \right)^{ - 1}}{ \boldsymbol{\phi} _1} + {\boldsymbol{\phi} _2} \quad \text{when} \boldsymbol{\phi}_1 \text{Small amount},\\
+      {\bm{J}_r}{\left( {{\boldsymbol{\phi} _1}} \right)^{ - 1}}{\boldsymbol{\phi} _2} + {\boldsymbol{\phi} _1} \quad \text{when} \boldsymbol{\phi}_2 \text{Small amount}.
+  \end{array} \right.
+\end{equation}
+
+Take the first approximation as an example. This formula tells us to multiply a tiny rotation matrix $\bm{R}_1$ to a rotation matrix $\bm{R}_2$ (the Lie algebra is $\boldsymbol{\phi}_2$) (Li algebra is $\boldsymbol{\phi} _1$) can be approximated as the original Lie algebra $\boldsymbol{\phi}_2$Added an item${\bm{J}_l}{\left( {{\boldsymbol{\phi} _2}} \right)^{ - 1}}{ \boldsymbol{\phi} _1}$. 
+Similarly, the second approximation describes the case where the right multiplied by a small displacement. Therefore, under the BCH approximation, the Lie algebra is divided into a left-multiplying approximation and a right-multiplying approximation. In use, we must pay attention to whether the left-multiplier model or the right-multiply model is used.
+
+This book takes the left multiplication as an example. Left multiply BCH approximates Jacobian $\bm{J}_l$ is actually the content of the form ~\eqref{eq:lieAlgebraJacobian}~:
+
+\begin{equation} 
+{ \bm{J}_l} = \bm{J} = \frac{{\sin \theta }}{\theta } \bm{I} + \left( {1 - \frac{{\sin \theta }}{\theta }} \right) \bm{a} { \bm{a}^\mathrm{T}} + \frac{{1 - \cos \theta }}{\theta }{ \bm{a}^ \wedge}.
+\end{equation}
+
+Its inverse is:
+
+\begin{equation}
+\bm{J}_l^{ - 1} = \frac{\theta }{2}\cot \frac{\theta }{2} \bm{I} + \left( {1 - \frac{\theta } {2}\cot \frac{\theta }{2}} \right) \bm{a} {\bm{a}^\mathrm{T}} - \frac{\theta }{2}{ \bm{ a}^ \wedge }.
+\end{equation}
+
+Right-handed Jacobi only needs to take a negative sign for the argument:
+
+\begin{equation}
+\bm{J}_r(\boldsymbol{\phi}) =\bm{J}_l(-\boldsymbol{\phi}) .
+\end{equation}
+
+In this way, we can talk about the relationship between Lie group multiplication and Lie algebra addition.
+
+For the convenience of the reader, we restate the meaning of the BCH approximation. Suppose that for a rotation of $\bm{R}$, the corresponding Lie algebra is $\boldsymbol{\phi}$. We give it a small rotation to the left, denoted as $\Delta \bm{R}$, and the corresponding Lie algebra is $\Delta \boldsymbol{\phi}$. Then, on Lie group, the result is $ \Delta \bm{R} \cdot \bm{R}$, and on the Lie algebra, according to the BCH approximation, it is $\bm{J}_l^{-1 } (\boldsymbol{\phi}) \Delta \boldsymbol{\phi} + \boldsymbol{\phi}$. Combined, you can simply write:
+
+\begin{equation}
+\exp \left( {\Delta { \boldsymbol{\phi} ^ \wedge }} \right)\exp \left( {{ \boldsymbol{\phi} ^ \wedge }} \right) = \exp \left( {{{\left( { \boldsymbol{\phi} + \bm{J}_l^{ - 1}\left( \boldsymbol{\phi} \right)\Delta \boldsymbol{\phi} } \right)} ^ \wedge }} \right).
+\end{equation}
+
+Conversely, if we add on Lie algebra and add $\boldsymbol{\phi}$ to $\Delta \boldsymbol{\phi}$, we can approximate the multiplication of the left and right Jacobian on the Lie group:
+
+\begin{equation}
+\exp \left( {{{\left( { \boldsymbol{\phi}  + \Delta \boldsymbol{\phi} } \right)}^ \wedge }} \right) = \exp \left( {{{\left( {{ \bm{J}_l}\Delta \boldsymbol{\phi} } \right)}^ \wedge }} \right)\exp \left( {{ \boldsymbol{\phi} ^ \wedge }} \right) = \exp \left( {{\boldsymbol{\phi} ^ \wedge }} \right)\exp \left( {{{\left( {{\bm{J}_r}\Delta \boldsymbol{\phi} } \right)}^ \wedge }} \right).
+\end{equation}
+
+This provides a theoretical basis for calculus after Lie algebra. Similarly, for $\mathrm{SE}(3)$, there is a similar BCH approximation:
+
+\begin{equation}
+\exp \left( {\Delta {\boldsymbol{\xi} ^ \wedge }} \right)\exp \left( {{ \boldsymbol{\xi} ^ \wedge }} \right) \approx \exp \left ( {{{\left( {{ \bm{\mathcal{J}}_l^{-1} }\Delta \boldsymbol{\xi} + \boldsymbol{\xi} } \right)}^ \wedge }} \right),
+\end{equation}
+
+\begin{equation}
+\exp \left( {{ \boldsymbol{\xi} ^ \wedge }} \right) \exp \left( {\Delta {\boldsymbol{\xi} ^ \wedge }} \right) \approx \exp \left ( {{{\left( {{ \bm{\mathcal{J}}_r^{-1} }\Delta \boldsymbol{\xi} + \boldsymbol{\xi} } \right)}^ \wedge }} \right).
+\end{equation}
+
+Here the $\bm{\mathcal{J}}_l$ form is more complicated. It is a matrix of $6 \times 6$. Readers can refer to the contents of the \cite{Barfoot2016} formulas (7.82) and (7.83). Since we did not use the Jacobi in the calculation, the actual form is omitted here.
