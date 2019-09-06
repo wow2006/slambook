@@ -1,0 +1,22 @@
+\subsubsection{Install OpenCV}
+
+OpenCV\footnote{Official homepage:\url{http://opencv.org}. } provides a large number of open source image algorithms, is a library of image processing algorithms used in computer vision. This book also uses OpenCV for basic image processing. Before using it, it is recommended that the reader install it from the source code. Under Ubuntu, there are two ways to \textbf{install from source code} and \textbf{install library file only}:
+
+\begin{enumerate}
+	\item Installation from source code means downloading all OpenCV source code from the OpenCV website and compiling and installing it on the machine for use. The advantage is that the version you can choose is rich, and you can see the source code, but it takes some compilation time.
+	\item only installs the library file, which means to install the library file compiled by Ubuntu community personnel through Ubuntu, so there is no need to recompile it.
+\end{enumerate}
+
+Since we are using a newer version of OpenCV, we must install it from the source code. As a result, you can adjust some compile options to match the programming environment (for example, GPU acceleration is not required); in addition, source code installation can use some additional features. OpenCV currently maintains two major versions, divided into OpenCV 2.4 series and OpenCV 3 series. This book uses the OpenCV \textbf{3} series.
+
+Since the OpenCV project is relatively large, it is not placed under the 3rdparty of this book. Readers can download from ~\url{http://opencv.org/downloads.html} and choose OpenCV for Linux. You will get a tarball like opencv-3.1.0.zip. Extract it to any directory, we found that OpenCV is also a cmake project.
+
+Before compiling, first install the OpenCV dependencies:
+
+\begin{lstlisting}[language=sh,caption=terminal input:]
+Sudo apt-get install build-essential libgtk2.0-dev libvtk5-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev libtbb-dev
+\end{lstlisting}
+
+In fact, OpenCV has a lot of dependencies, and the lack of some compiled items will affect some of its features (but we won't use all the features). OpenCV will check if the dependencies will be installed and adjust its functionality during the cmake phase. If you have a GPU on your computer and have related dependencies installed, OpenCV will also speed up the GPU. But for this book, the above dependencies are enough.
+
+Subsequent compilation and installation is the same as the normal cmake project. After make, call sudo make install to install OpenCV on your machine (instead of just compiling it). Depending on the machine configuration, this compilation process can take anywhere from twenty minutes to an hour. If your CPU is strong, you can use a command like "make -j4" to call multiple threads to compile (the arguments after -j are the number of threads used). After installation, OpenCV is stored by default in the /usr/local directory. You can find the location where OpenCV header files and library files are installed and see where they are. In addition, if you have previously installed the OpenCV 2 series, it is recommended that you install OpenCV 3 somewhere else (think how this should work).

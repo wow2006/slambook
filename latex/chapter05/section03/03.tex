@@ -1,0 +1,109 @@
+\subsubsection{Operating OpenCV images}
+Next, let's familiarize yourself with the operation of OpenCV on images through a routine.
+\begin{lstlisting}[language=C++,caption=slambook/ch5/imageBasics/imageBasics.cpp]
+#include <iostream>
+#include <chrono>
+
+Using namespace std;
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+Int main(int argc, char **argv) {
+// read the image specified by argv[1]
+Cv::Mat image;
+Image = cv::imread(argv[1]); //cv::imread function reads the image under the specified path
+
+/ / Determine whether the image file is read correctly
+If (image.data == nullptr) { //The data does not exist, it may be that the file does not exist
+Cerr << "file" << argv[1] << "not present." << endl;
+Return 0;
+}
+
+// The file is read smoothly, first output some basic information
+Cout << "image width is" << image.cols << ", high as " << image.rows 
+<< ", the number of channels is " << image.channels() << endl;
+Cv::imshow("image", image); // Display images with cv::imshow
+Cv::waitKey(0); // Pause the program and wait for a key input
+
+/ / Determine the type of image
+If (image.type() != CV_8UC1 && image.type() != CV_8UC3) {
+// Image type does not meet the requirements
+Cout << "Please enter a color map or grayscale image." << endl;
+Return 0;
+}
+
+// Traverse the image, please note that the following traversal method can also be used for random pixel access
+// Use std::chrono to time the algorithm
+Chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+For (size_t y = 0; y < image.rows; y++) {
+// Get the line pointer of the image with cv::Mat::ptr
+Unsigned char *row_ptr = image.ptr<unsigned char>(y); // row_ptr is the head pointer of the yth line
+For (size_t x = 0; x < image.cols; x++) {
+// access the pixel at x, y
+Unsigned char *data_ptr = &row_ptr[x * image.channels()]; // data_ptr points to the pixel data to be accessed
+// output each channel of the pixel, if there is only one channel in grayscale
+For (int c = 0; c != image.channels(); c++) {
+Unsigned char data = data_ptr[c]; // data is the value of the cth channel of I(x,y)
+}
+}
+}
+Chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+Chrono::duration<double> time_used = chrono::duration_cast < chrono::duration < double >> (t2 - t1);
+Cout << "Through the image time:" << time_used.count() << "seconds." << endl;
+
+// About a copy of cv::Mat
+// Direct assignment does not copy data
+Cv::Mat image_another = image;
+// Modify image_another will cause image to change
+Image_another(cv::Rect(0, 0, 100, 100)).setTo(0); // Zero the block with the top left corner of 100*100
+Cv::imshow("image", image);
+Cv::waitKey(0);
+
+/ / Use the clone function to copy data
+Cv::Mat image_clone = image.clone();
+Image_clone(cv::Rect(0, 0, 100, 100)).setTo(255);
+Cv::imshow("image", image);
+Cv::imshow("image_clone", image_clone);
+Cv::waitKey(0);
+
+/ / There are many basic operations on the image, such as cutting, rotating, scaling, etc., limited to the space will not be introduced one by one, please refer to the OpenCV official documentation to query the calling method of each function.
+Cv::destroyAllWindows();
+Return 0;
+}
+\end{lstlisting}
+
+In this routine, we demonstrate the following operations: image reading, display, pixel traversal, copying, assignment, and so on. Most of the annotations have been written in the code. When compiling the program, you need to add the OpenCV header file to CMakeLists.txt and then link the program to the library file. Also, since you are using the C++ 11 standard (such as nullptr and chrono), you also need to set up the compiler:
+
+\begin{lstlisting}[language=Python,caption=slambook/ch5/imageBasics/CMakeLists.txt]
+# Add C++ 11 standard support
+Set( CMAKE_CXX_FLAGS "-std=c++11" )
+
+# OpenCV
+Find_package( OpenCV REQUIRED )
+# Add header file
+Include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+Add_executable( imageBasics imageBasics.cpp )
+# OpenCV library
+Target_link_libraries( imageBasics ${OpenCV_LIBS} )
+\end{lstlisting}
+
+Regarding the code, we give a few notes:
+
+\begin{enumerate}
+	\item The program reads the image position from argv[1], which is the first argument of the command line. We have prepared an image for the reader (ubuntu.png, an Ubuntu wallpaper, I hope you like it) for testing. Therefore, after compiling, call this program with the following command:
+	\begin{lstlisting}[language=sh,caption=terminal input:]
+	Build/imageBasics ubuntu.png
+	\end{lstlisting}
+	If you call this program in the IDE, be sure to give it to the parameter at the same time. This can be configured in the startup item.
+	The 10\textasciitilde18 line of the \item program reads the image using the cv::imread function and displays the image and basic information as \mbox{. }
+	\item traverses all the pixels in the image at line 35\textasciitilde47 and calculates the time spent in the entire loop. Note that the way the pixels are traversed is not unique, and the way the routines are given is not the most efficient. OpenCV provides an iterator that you can iterate through the pixels of the image. Alternatively, cv::Mat::data provides a pointer to the beginning of the image data, you can calculate the offset directly by the pointer, and then get the actual memory location of the pixel. The way the routines are used is to make the reader understand the structure of the image.
+	
+	On the author's machine (virtual machine), it takes about 12.74ms to traverse this image. You can compare the speed on your own machine. However, we are using cmake's default debug mode, which is much faster if we use release mode.
+	
+	\item OpenCV provides a number of functions for manipulating images. We will not list them here, otherwise the book will become the OpenCV operating manual. The routine gives a more common read, display, and deep copy misunderstanding that may be trapped in the copied image. In the process of programming, the reader will also encounter the rotation, interpolation and other operations of the image. At this time, you should consult the corresponding documents of the function to understand their principle and usage.
+\end{enumerate}
+
+It should be noted that OpenCV is not the only image library, it is just one of the more widely used in many image libraries. However, most image libraries have similar expressions for images. We hope that readers will understand the representation of images in OpenCV and understand the expression of images in other libraries so that they can handle them themselves when they need data formats. In addition, since cv::Mat is also a matrix class, in addition to representing images, we can also use it to store matrix data such as pose. It is generally believed that Eigen is more efficient to use for fixed size matrices.
+

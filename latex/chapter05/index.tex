@@ -1,0 +1,30 @@
+\chapter{Cameras and Images}
+\label{cpt:5}
+
+\begin{mdframed}  
+	\textbf{main target}
+	\begin{enumerate}
+		\item Understand the model of the pinhole camera and participate in the radial distortion parameters.
+		\item Understand how a spatial point is projected onto the camera's imaging plane.
+		\item Master the image storage and expression of OpenCV.
+		\item Learn the basic camera calibration method.
+	\end{enumerate}
+\end{mdframed}
+
+In the previous two lectures, we introduced the question of how the robot expresses its own pose, and partially explained the meaning of the variables and the equations of motion in the classical model of SLAM. This talk will discuss "How robots observe the outside world," which is part of the observation equation. In the camera-based visual SLAM, the observation mainly refers to the process of \textbf{camera imaging}.
+
+We can see a lot of photos in real life. In a computer, a photo consists of a number of pixels, each of which records information about color or brightness. Light reflected or emitted by an object in the three-dimensional world passes through the camera's optical center and is projected onto the imaging plane of the camera. After the camera's light sensor receives the light, it produces a measurement and gets the pixels, which form the photo we see. Can this process be described by mathematical principles? This lecture will first discuss the camera model, explain how the projection relationship is specifically described, and what is the internal reference of the camera. At the same time, a brief introduction to the principle of binocular imaging and RGB-D cameras. Then, introduce the basic operation of two-dimensional photo pixels. Finally, an experiment of point cloud stitching is demonstrated based on the meaning of internal and external parameters.
+\newpage
+
+\includepdf{chapter05/resources/other/ch5.pdf}
+\newpage
+
+\input{chapter05/section01/00.tex}
+
+\input{chapter05/section02/00.tex}
+
+\input{chapter05/section03/00.tex}
+
+\input{chapter05/section04/00.tex}
+
+\input{chapter05/section05/00.tex}

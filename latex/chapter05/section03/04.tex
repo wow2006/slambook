@@ -1,0 +1,48 @@
+\subsection{Image De-distortion}
+
+In the theoretical part we introduced radial and tangential distortion, and below demonstrates a dedistortion process. OpenCV provides the dedistortion function cv::Undistort(), but in this case we start from the formula to calculate the image coordinates before and after the distortion.
+
+\begin{lstlisting}[language=C++,caption=slambook/ch5/imageBasics/undistortImage.cpp]
+#include <opencv2/opencv.hpp>
+#include <string>
+Using namespace std;
+String image_file = "./distorted.png"; // Make sure the path is correct
+
+Int main(int argc, char **argv) {
+	// This program implements the code for the distorted part. Although we can call OpenCV's de-distortion, it's helpful to understand it yourself.
+	// Distortion parameters
+	Double k1 = -0.28340811, k2 = 0.07395907, p1 = 0.00019359, p2 = 1.76187114e-05;
+	// internal reference
+	Double fx = 458.654, fy = 457.296, cx = 367.215, cy = 248.375;
+	
+	Cv::Mat image = cv::imread(image_file, 0); // The image is grayscale, CV_8UC1
+	Int rows = image.rows, cols = image.cols;
+	Cv::Mat image_undistort = cv::Mat(rows, cols, CV_8UC1); // Figure after de-distortion
+	
+	/ / Calculate the content of the image after dedistortion
+	For (int v = 0; v < rows; v++) {
+		For (int u = 0; u < cols; u++) {
+			// Calculate the point (u, v) corresponding to the coordinates in the distorted image (u_distorted, v_distorted) according to the formula
+			Double x = (u - cx) / fx, y = (v - cy) / fy;
+			Double r = sqrt(x * x + y * y);
+			Double x_distorted = x * (1 + k1 * r * r + k2 * r * r * r * r) + 2 * p1 * x * y + p2 * (r * r + 2 * x * x);
+			Double y_distorted = y * (1 + k1 * r * r + k2 * r * r * r * r) + p1 * (r * r + 2 * y * y) + 2 * p2 * x * y;
+			Double u_distorted = fx * x_distorted + cx;
+			Double v_distorted = fy * y_distorted + cy;
+			
+			// assignment (nearest neighbor interpolation)
+			If (u_distorted >= 0 && v_distorted >= 0 && u_distorted < cols && v_distorted < rows) {
+				Image_undistort.at<uchar>(v, u) = image.at<uchar>((int) v_distorted, (int) u_distorted);
+			} else {
+				Image_undistort.at<uchar>(v, u) = 0;
+			}
+		}
+	}
+	
+	// Draw the image after distorting
+	Cv::imshow("distorted", image);
+	Cv::imshow("undistorted", image_undistort);
+	Cv::waitKey();
+	Return 0;
+}
+\end{lstlisting}
