@@ -1,0 +1,53 @@
+\subsection{Levinburg-Marquart method}
+
+The approximate second-order Taylor expansion used in the Gauss-Newton method can only have a good approximation near the expansion point, so we naturally think that we should add a range to $\Delta \bm{x}$, called \textbf{ Trust Region}. This range defines the circumstances under which a second-order approximation is valid. This type of method is also known as \textbf{Trust Region Method}. In the area of trust, we think that the approximation is valid; if this area is out, the approximation may be problematic.
+
+So how do you determine the scope of this trust zone? A better method is based on the difference between our approximation model and the actual function: if the difference is small, the approximation effect is good, we expand the approximation range; conversely, if the difference is large, the approximation range is narrowed. We define an indicator $\rho$ to describe how good or bad the approximation is:
+
+\begin{equation}\label{eq:6.24}
+\rho  = \frac{{f\left( {\bm{x} + \Delta \bm{x}} \right)}  - {{ {f\left( \bm{x} \right)} }}}{ \bm{J}\left( \bm{x} \right)^\mathrm{T} \Delta \bm{x} } .
+\end{equation}
+
+The numerator of $\rho$ is the value of the actual function drop, and the denominator is the value of the approximate model drop. If $\rho$ is close to 1, the approximation is good. If $\rho$ is too small, indicating that the actual reduced value is much less than the approximate reduced value, then the approximation is considered to be poor and the approximate range needs to be reduced. Conversely, if $\rho$ is large, the actual decline is larger than expected, and we can zoom in on the approximate range.
+
+So, we build a modified version of the nonlinear optimization framework, which will have a better effect than the Gauss Newton method:
+
+\begin{mdframed}
+	\begin{enumerate}
+		\item gives the initial value $\bm{x}_0$ and the initial optimization radius $\mu$.
+		\item For the $k$ iteration, add a confidence region based on the Gauss-Newton method to solve:
+		\begin{equation}\label{eq:LM}
+		\mathop {\min }\limits_{\Delta \bm{x}_k} \frac{1}{2}{\left\| {f\left( \bm{x}_k \right) + \bm{J} \left( \bm{x}_k \right)^\mathrm{T} \Delta \bm{x}_k} \right\|^2}, \quad \mathrm{s.t.}\quad {\left\| {\bm{D} \Delta \bm{x}_k} \right\|^2} \leqslant \mu ,
+		\end{equation}
+		Where $\mu$ is the radius of the confidence zone and $\bm{D}$ is the coefficient matrix, which will be explained later.
+		\item calculates $\rho$ by the formula \eqref{eq:6.24}.
+		\item If $\rho > \frac{3}{4}$, set $\mu = 2 \mu$.
+		\item If $\rho < \frac{1}{4}$, set $\mu = 0.5 \mu$.
+		\item If $\rho$ is greater than a certain threshold, it is considered to be approximate. Let $\bm{x}_{k+1} = \bm{x}_k+\Delta \bm{x}_k$.
+		\item determines if the algorithm converges. If it does not converge, return to step 2, otherwise it ends.
+	\end{enumerate}
+\end{mdframed}
+
+Here, the multiples and thresholds of the approximate range expansion are empirical values and can be replaced with other values. In the formula \eqref{eq:LM}, we limit the increment to a ball with a radius of $\mu$, which is considered valid only in this ball. After taking $\bm{D}$, the ball can be seen as an ellipsoid. In Levinberg's optimization method, taking $\bm{D}$ as a unit matrix $\bm{I}$ is equivalent to directly constraining $\Delta \bm{x}_k$ in a ball. . Subsequently, Marquartt proposed to take $\bm{D}$ as a non-negative diagonal matrix—in practice, the square root of the diagonal element of $\bm{J}^T \bm{J}$ is usually used, so that The constraint range is larger in the small gradient.
+
+In any case, in the Levenberg-Marquart optimization, we need to solve the sub-question \eqref{eq:LM} to get the gradient. This subproblem is an optimization problem with inequality constraints. We use the Lagrangian multiplier to put the constraint into the objective function to form a Lagrangian function:
+
+\begin{equation}
+\mathcal{L}(\Delta \bm{x}_k, \lambda)= \frac{1}{2} {\left\| {f\left( \bm{x}_k \right) + \bm{J} \left( \bm{x}_k \right)^\mathrm{T} \Delta \bm{x}_k} \right\|^2} + \frac{\lambda}{2} \left( \left\| \bm{D} \Delta \bm{x}_k \right\|^2 - \mu \right).
+\end{equation}
+
+Here $\lambda$ is the Lagrange multiplier. Similar to the Gaussian Newton method, the Lagrangian function has zero derivative for $\Delta \bm{x}$, and its core is still a linear equation for calculating increments:
+
+\begin{equation}
+\left( \bm{H} +\lambda \bm{D}^\mathrm{T} \bm{D} \right) \Delta \bm{x}_k = \bm{g}.
+\end{equation}
+
+As you can see, the incremental equation has one more $\lambda \bm{D}^T \bm{D}$ compared to the Gauss-Newton method. If you consider its simplified form, ie $\bm{D}=\bm{I}$, then the equivalent of solving \footnote{strict readers may not be satisfied with the narrative here. Constraints on the original problem of the trust region In addition to the Lagrangian function deriving zero, the KKT condition has some other constraints: $\lambda>0$, and $\lambda(\|\bm{D} \Delta \bm{x}\|^2-\mu)=0$. But in the LM iteration, we might as well consider it as a penalty with $\lambda$ as the weighting function on the objective function of the original problem. After each iteration, if the trust region condition is found to be unsatisfied, or the objective function increases, the weight of $\lambda$ is increased until the trust region condition is finally met. Therefore, there are different interpretations of the LM algorithm in theory, but in practice we only care about whether it works smoothly. }:
+
+\begin{displaymath}
+\left( \bm{H} +\lambda \bm{I} \right) \Delta \bm{x}_k = \bm{g}.
+\end{displaymath}
+
+We see that when the parameter $\lambda$ is small, $\bm{H}$ is dominant, which means that the quadratic approximation model is better in this range, Levinburg-Marquartt method is more Close to the Gauss Newton method. On the other hand, when $\lambda$ is large, $\lambda \bm{I}$ dominates, and the Levenberg-Marquart method is closer to a step-down method (ie, the steepest drop). This shows that the secondary approximation in the vicinity is not good enough. The Levinberg-Marquart method can solve the non-singular and ill-conditioned problems of the coefficient matrix of linear equations to a certain extent, providing a more stable and accurate increment $\Delta \bm{x} $.
+
+In practice, there are many other ways to solve for increments, such as Dog-Leg\cite{Nocedal2006}. What we've introduced here is just the most common and basic method, and the most used method in visual SLAM. In practical problems, we usually choose one of the Gauss Newton method or the Levinburg-Marquart method as the gradient descent strategy. When the problem is of a good nature, use Gauss Newton. If the problem is close to morbidity, use the Levenberg-Marquart method.

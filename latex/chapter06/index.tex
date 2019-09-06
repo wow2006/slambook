@@ -1,0 +1,33 @@
+\chapter{nonlinear optimization}
+
+\label{cpt:6}
+
+\begin{mdframed}  
+	\textbf{main target}
+	\begin{enumerate}
+		\item understands the meaning and handling of least squares.
+		\item Understand the descending strategies of Gauss-Newton and Levenburg-\\Marquadt.
+		\item Learn the basic usage of the Ceres library and the g2o library.
+	\end{enumerate}
+\end{mdframed}
+
+In the previous few lectures, we introduced the equations of motion and observation equations of the classical SLAM model. Now we know that the poses in the equation can be described by the transformation matrix and then optimized with Lie algebra. The observation equation is given by the camera imaging model, where the internal reference is fixed with the camera and the external reference is the pose of the camera. Thus, we have clarified the specific expression of the classic SLAM model in the visual situation.
+
+However, due to the existence of noise, the equations of the equation of motion and the equation of observation must not be exactly true. Although the camera fits the pinhole model very well, unfortunately the data we get is usually affected by various unknown noises. Even if we have a high-precision camera, the equations of motion and observation equations can only be approximated. Therefore, instead of assuming that the data must conform to the equation, it is better to discuss how to make an accurate state estimate in the noisy data.
+
+Solving the state estimation problem requires a certain degree of optimization background knowledge. This section introduces the basic unconstrained nonlinear optimization method and introduces how the optimized libraries g2o and Ceres are used.
+
+\newpage
+\includepdf{chapter06/resources/other/ch6.pdf}
+\newpage
+
+\input{chapter06/section01/00.tex}
+
+\input{chapter06/section02/00.tex}
+
+\input{chapter06/section03/00.tex}
+
+\input{chapter06/section04/00.tex}
+
+\input{chapter06/section05/00.tex}
+

@@ -1,0 +1,11 @@
+\subsection{g2o compilation and installation}
+
+Before using a library, we need to compile and install it. Readers should have experienced this process many times, and they are basically the same. For g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o} or from the third-party codebase provided with this book. Since g2o is still going to be updated, I suggest you use g2o under 3rdparty to ensure that the version is the same as mine.
+
+G2o is also a cmake project. Let's first install its dependencies (some dependencies coincide with Ceres):
+
+\begin{lstlisting}[language=sh,caption=terminal input:]
+Sudo apt-get install qt5-qmake qt5-default libqglviewer-dev-qt5 libsuitesparse-dev libcxsparse3 libcholmod3
+\end{lstlisting}
+
+Then, compile and install g2o according to cmake. The description of the process is omitted here. After the installation is complete, the g2o header file will be located under /usr/local/g2o and the library file will be located under /usr/local/lib/. Now, let's revisit the curve fitting experiment in the Ceres routine and experiment again in g2o.

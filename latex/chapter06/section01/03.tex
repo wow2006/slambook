@@ -1,0 +1,75 @@
+\subsection{Example: Batch status estimation}
+
+I find it a better idea to give a simple example here. Consider a very simple discrete time system:
+
+\begin{equation}
+\begin{array}{lll}
+{x_k} &= {x_{k - 1}} + {u_k} + {w_k},&\qquad w_k \sim \mathcal{N}\left( {0,Q_k} \right)\\
+{z_k} &= {x_k} + {n_k},&\qquad {n_k}\sim \mathcal{N}\left( {0,R_k} \right)
+\end{array}
+\end{equation}
+
+This can express a car that moves forward or backward along the $x$ axis. The first formula is the equation of motion, $u_k$ is the input, $w_k$ is the noise, the second is the observation equation, and $z_k$ is the measurement of the position of the car. Take the time $k=1, \ldots, 3$, and now I want to estimate the state based on the existing $v,y$. Let the initial state $x_0$ be known. Let's derive the maximum likelihood estimate for the batch state.
+
+First, let the batch state variable be $\bm{x} = [x_0,x_1, x_2, x_3]^\mathrm{T}$, and make the batch observation $\bm{z} = [z_1,z_2,z_3]^ \mathrm{T}$, define $\bm{u}=[u_1,u_2,u_3]^\mathrm{T}$ in the same way. According to previous derivation, we know that the maximum likelihood estimate is:
+
+\begin{equation}
+\begin{aligned}
+{\bm{x}_{\mathrm{map}}^*} &= \arg \max P(\bm{x}|\bm{u},\bm{z}) = \arg \max P(\bm{u},\bm{z}|\bm{x})\\
+&= \prod\limits_{k = 1}^3 {P({u_k}|{x_{k - 1}},{x_k})\prod\limits_{k = 1}^3 {P\left( {{z_k}|{x_k}} \right)} }, 
+\end{aligned}
+\end{equation}
+
+For each specific item, such as the equation of motion, we know that:
+
+\begin{equation}
+P({u_k}|{x_{k - 1}},{x_k}) = \mathcal{N}({x_k} - {x_{k - 1}},{Q_k}),
+\end{equation}
+
+The observation equations are similar:
+
+\begin{equation}
+P\left( {{z_k}|{x_k}} \right) = \mathcal{N}\left( {{x_k},{R_k}} \right).
+\end{equation}
+
+Based on these methods, we can actually solve the above batch state estimation problem. According to the previous description, the error variable can be constructed:
+
+\begin{equation}
+{e_{u,k}} = {x_k} - {x_{k - 1}} - {u_k}, \quad {e_{z,k}} = {z_k} - {x_k},
+\end{equation}
+
+Then the objective function of least squares is:
+
+\begin{equation}
+\min \sum\limits_{k = 1}^3 {e_{u,k}^\mathrm{T} Q_k^{ - 1}{e_{u,k}}} + \sum\limits_{k = 1 }^3 {e_{z,k}^\mathrm{T}{R^{ - 1}_k}{e_{z,k}}}. 
+\end{equation}
+
+In addition, this system is a linear system, and we can easily write it as a vector form. Define the vector $\bm{y}=[\bm{u}, \bm{z}]^\mathrm{T}$, then write the matrix $\bm{H}$ so that:
+
+\begin{equation}
+\bm{y}-\bm{H}\bm{x} = \bm{e} \sim \mathcal{N}(\bm{0}, \boldsymbol{\Sigma}).
+\end{equation}
+Then:
+\begin{equation}
+\bm{H} = \left[ {\begin{array}{*{20}{c}}
+	1&{ - 1}&0&0\\
+	0&1&{ - 1}&0\\
+	0&0&1&{ - 1}\\
+	\hline
+	0&1&0&0\\
+	0&0&1&0\\
+	0&0&0&1
+	\end{array}} \right],
+\end{equation}
+
+And $\boldsymbol{\Sigma}=\mathrm{diag}(Q_1, Q_2, Q_3, R_1, R_2, R_3)$. The whole question can be written as:
+
+\begin{equation}
+\bm{x}^*_{\mathrm{map}} = \arg \min \bm{e}^\mathrm{T} \boldsymbol{\Sigma}^{-1} \bm{e},
+\end{equation}
+
+Later we will see that this problem has a unique solution:
+
+\begin{equation}
+\bm{x}^*_{\mathrm{map}} = (\bm{H}^\mathrm{T} \boldsymbol{\Sigma}^{-1} \bm{H})^{-1} \bm{H}^\mathrm{T} \boldsymbol{\Sigma}^{-1} \bm{y}.
+\end{equation}

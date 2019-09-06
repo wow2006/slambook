@@ -1,0 +1,64 @@
+\subsection{Batch state estimation and maximum a posteriori estimate}
+
+Following the previous lectures, we review the classic SLAM model discussed in the second lecture. It consists of an equation of motion and an observing equation, as shown by the formula \eqref{eq:slamproblem}:
+
+\begin{equation}
+\left\{ \begin{array}{l}
+{\bm{x}_k} = f\left( {{\bm{x}_{k - 1}},{\bm{u}_k}} \right) + \bm{w}_k\\
+{\bm{z}_{k,j}} = h\left( {{ \bm{y}_j},{ \bm{x}_k}}  \right)+ \bm{v}_{k,j}
+\end{array} \right. .
+\end{equation}
+
+Through the knowledge of Lecture 4, we learned that $\bm{x}_k$ is the pose of the camera and can be described by $\mathrm{SE}(3)$. As for the observation equation, the fifth lecture has already explained, that is, the pinhole camera model. In order to give readers a deeper impression of them, we may wish to discuss their specific parametric forms. First, the pose variable $\bm{x}_k$ can be expressed by $\bm{T}_k \in \mathrm{SE}(3) $. Second, the equation of motion is related to the specific form of the input, but there is no particularity in the visual SLAM (as in the case of ordinary robots and vehicles), we will not talk about it for the time being. The observation equation is given by the pinhole model. Suppose that an observation is made on the road sign $\bm{y}_j$ at $\bm{x}_k$, corresponding to the pixel position $\bm{z}_{k,j}$ on the image, then the observation The equation can be expressed as
+
+\begin{equation}
+s \bm{z}_{k,j}= \bm{K} (\bm{R}_k {\bm{y}_j}+\bm{t}_k).
+\end{equation}
+
+Where $\bm{K}$ is the camera's internal parameter, $s$ is the distance of the pixel, and is the third of $(\bm{R}_k {\bm{y}_j}+\bm{t}_k)$ Component. If the pose is described using the transformation matrix $\bm{T}_k$, the landmark point $\bm{y}_j$ must be described in homogeneous coordinates and converted to non-homogeneous coordinates after the calculation is completed. If you are not familiar with this process, please go back to the previous lecture.
+
+Now, consider what happens when the data is affected by noise. In the motion and observation equations, we \textbf{usually} assume that two noise terms $\bm{w}_k, \bm{v}_{k,j}$ satisfy the zero mean Gaussian distribution, like this:
+
+\begin{equation}
+{\bm{w}_k} \sim \mathcal{N}\left( {\bm{0},{\bm{R}_k}} \right),{\bm{v}_k} \sim \mathcal {N}\left( {\bm{0},{{{\bm{Q}}}_{k,j}}} \right).
+\end{equation}
+
+Where $\mathcal{N}$ represents a Gaussian distribution, $\bm{0}$ represents a zero mean, $\bm{R}_k, and \bm{Q}_{k,j}$ is a covariance matrix. Under the influence of these noises, we hope to infer the pose $\bm{x}$ and the map $\bm{y}$ through the noisy data $\bm{z}$ and $\bm{u}$ (and Their probability distribution), which constitutes a state estimation problem.
+
+The methods for dealing with this state estimation problem are roughly divided into two types. Since these data are coming over time during the SLAM process, intuitively, we should hold an estimate of the current time and then update it with new data. This method is called \textbf{incremental}, or \textbf{filter}. For a long time in history, researchers have used filters, especially the Extended Kalman Filter (EKF) and its derivatives to solve it. The other way is to "snap" the data together, which is called \textbf{batch}. For example, we can put all the input and observation data from 0 to $k$ at the moment, and ask, under such input and observation, how to estimate the trajectory and map from 0 to $k$?
+
+These two different approaches lead to many different estimation methods. In general, the incremental method only cares about the state estimate of \textbf{current time}, $\bm{x}_k$, and does not consider the previous state; relatively, the batch method can be larger in \textbf{ Range} is optimized and is considered superior to the traditional filter \textsuperscript{\cite{Strasdat2012}}, becoming the mainstream method of current visual SLAM. In extreme cases, we can let the robot or drone collect data at all times and bring it back to the computing center for unified processing, which is the mainstream practice of SfM (Structure from Motion). Of course, this extreme situation is obviously not \textbf{real time}, and does not conform to the SLAM application scenario. So in SLAM, practical methods are usually a compromise. For example, we fixed some historical trajectories and optimized only some trajectories near the current time. This is the \textbf{sliding window estimation} method to be mentioned later.
+
+In theory, batch methods are easier to introduce. At the same time, it is understood that the batch method is also easier to understand the incremental method. Therefore, in this section, we focus on the batch optimization method based on nonlinear optimization. The Kalman filter and more in-depth knowledge are left to the back-end chapters. Since the discussion is on a batch approach, consider all the moments from 1 to $N$ and assume that there are $M$ landmark points. Define the robot pose and landmark point coordinates at all times:
+
+\[
+\bm{x}=\{ \bm{x}_1, \ldots, \bm{x}_N \}, \quad \bm{y} = \{\bm{y}_1, \ldots, \bm{ y}_M \}.
+\]
+
+Similarly, $\bm{u}$ without subscripts indicates input at all times, and $\bm{z}$ indicates observations at all times. Then we say that the estimation of the state of the robot, from the point of view of probability, is the condition that the input data $\bm{u}$ and the observed data $\bm{z}$ are known, and the state $\bm{ Conditional probability distribution for x}, \bm{y}$:
+
+\begin{equation}
+P( \bm{x},\bm{y} | \bm{z}, \bm{u}).
+\end{equation}
+
+In particular, when we don't know the control input, only one image is considered, that is, only the data brought by the observation equation is considered, which is equivalent to estimating $P( \bm{x},\bm{y} | \bm{ The conditional probability distribution of z})$, also known as Structure from Motion (SfM), is how to reconstruct the three-dimensional structure \textsuperscript{\cite{Agarwal2009}} from many images.
+
+In order to estimate the conditional distribution of state variables, Bayes' rule is used to:
+
+\begin{equation}
+P\left( { \bm{x},\bm{y}| \bm{z}, \bm{u}} \right) = \frac{{P\left( {\bm{z},\bm {u}|\bm{x},\bm{y}} \right)P\left( \bm{x}, \bm{y} \right)}}{{P\left( \bm{z} ,\bm{u}\right)}} \propto \underbrace{P\left( { \bm{z},\bm{u}| \bm{x},\bm{y} } \right)}_ {\text{liker}} \underbrace{P\left( \bm{x},\bm{y} \right)}_{\text{priority}}.
+\end{equation}
+
+Bayes' rule is called \textbf{posterior probability} on the left, $P(\bm{z}|\bm{x})$ on the right is called \textbf{Likehood}, and another part is $ P(\bm{x})$ is called \textbf{priority} (Prior). \textbf{It is difficult to directly find the posterior distribution, but to find a state optimal estimate, so that the posterior probability is maximized in this state.}(Maximize a Posterior, Map). It is feasible:
+
+\begin{equation}
+{(\bm{x},\bm{y})^*}_{\mathrm{MAP}} = \arg {\mathop{\rm max}\nolimits}\ P \left( {\bm{x} ,\bm{y}|\bm{z},\bm{u}} \right) = \arg \max P(\bm{z},\bm{u}|\bm{x},\bm{ y})P(\bm{x},\bm{y}).
+\end{equation}
+
+Note that the denominator part of Bayes' rule is independent of the state to be estimated $\bm{x}, \bm{y}$ and can therefore be ignored. The Bayesian rule tells us that solving the maximum posterior probability \textbf{ is equivalent to maximizing the likelihood and the prior product}. Further, of course we can also say, sorry, I don't know where the robot pose or road sign is, and there is no \textbf{priority}. Then, you can solve the \textbf{Maximize Likelihood Estimation} (MLE):
+ 
+\begin{equation}
+{ (\bm{x},\bm{y})^*}_{\mathrm{MLE}} = \arg \max P( \bm{z},\bm{u}| \bm{x}, \bm{y}).
+\end{equation}
+
+Intuitively, the likelihood is “what kind of observation data may be produced in the current position”. Since we know the observed data, the maximum likelihood estimate can be understood as: "\textbf{what state is most likely to produce the currently observed data"}. This is the intuitive meaning of maximum likelihood estimation.

@@ -1,0 +1,59 @@
+\subsection{Gaussian Newton method}
+
+The Gauss-Newton method is one of the easiest methods in the optimization algorithm. Its idea is to carry out the first-order Taylor expansion of $f(\bm{x})$. Note that this is not the target function $F(\bm{x})$ but $f(\bm{x})$, otherwise it becomes Newton.
+
+\begin{equation}
+\label{eq:approximation}
+f\left( {\bm{x} + \Delta \bm{x}} \right) \approx f\left( \bm{x} \right) + \bm{J} \left( \bm{x} \right)^\mathrm{T} \Delta \bm{x}.
+\end{equation}
+
+Here $\bm{J}(\bm{x})^\mathrm{T}$ is $f(\bm{x})$ for the derivative of $\bm{x}$, $n \times 1$ Column vector. According to the previous framework, the current goal is to find the increment $\Delta \bm{x}$, so that $\left\| {f\left( \bm{x} + \Delta \bm{x} \right)} \right \|^2$ reaches the minimum. In order to find $\Delta \bm{x}$, we need to solve a linear least squares problem:
+
+\begin{equation}
+\Delta \bm{x}^* = \arg \mathop {\min }\limits_{\Delta \bm{x}} \frac{1}{2}{\left\| {f\left( \bm{x} \right) + \bm{J} \left( \bm{x} \right)^\mathrm{T} \Delta \bm{x} } \right\|^2}.
+\end{equation}
+
+What is the difference between this equation and the previous one? Based on the extreme conditions, the above objective function is derived for $\Delta \bm{x}$ and the derivative is zero. To do this, first expand the squared term of the objective function:
+
+\begin{align*}
+\frac{1}{2}{\left\| {f\left( \bm{x} \right) + \bm{J} \left( \bm{x} \right)^\mathrm{T} \Delta \bm{x}} \right\|^2} &= \frac{1}{2}{\left( {f\left( \bm{x} \right) + \bm{J}\left( \bm{x} \right)^\mathrm{T} \Delta \bm{x}} \right)^\mathrm{T}}\left( {f\left( \bm{x} \right) + \bm{J} \left( \bm{x} \right)^\mathrm{T} \Delta \bm{x}} \right)\\
+&= \frac{1}{2}\left( \| f{{\left( \bm{x} \right)}\|^2_2 + 2 f\left( \bm{x} \right) \bm{J} {{\left( \bm{x} \right)}}^\mathrm{T} \Delta \bm{x} + \Delta { \bm{x}^\mathrm{T}}{\bm{J} (\bm{x})} \bm{J}(\bm{x})^\mathrm{T} \Delta \bm{x}} \right).
+\end{align*}
+
+Find the derivative of $\Delta \bm{x}$ and make it zero:
+
+\begin{displaymath}
+\bm{J} {\left( \bm{x} \right)}f\left( \bm{x} \right) + \bm{J} {\left( \bm{x} \right)} \bm{J}^\mathrm{T} \left( \bm{x} \right)\Delta \bm{x} = \bm{0}.
+\end{displaymath}
+
+The following equations can be obtained:
+
+\begin{equation}
+\underbrace{\bm{J} {\left( \bm{x} \right)} \bm{J}^\mathrm{T}}_{\bm{H}(\bm{x})} \left( \bm{x} \right)\Delta \bm{x} =  \underbrace{- \bm{J} {\left( \bm{x} \right)} f\left( \bm{x} \right)}_{\bm{g}(\bm{x})}.
+\end{equation}
+
+This equation is about the \textbf{linear equations} of the variable $\Delta \bm{x}$, which we call \textbf{incremental equation}, also known as \textbf{Gauss Newton's equation} (Gauss-Newton) Equation) or \textbf{Normal equation}. We define the coefficient on the left as $\bm{H}$ and the right as $\bm{g}$, then the above formula becomes:
+
+\begin{equation}
+\label{eq:minimize-deltax}
+\bm{H} \Delta \bm{x} = \bm{g}.
+\end{equation}
+
+It makes sense to make $\bm{H}$ to the left side here. Compared with the Newton method, the Gauss-Newton method uses $\bm{J}\bm{J}^\mathrm{T}$ \textbf{Approximation of the Second Order Hessian Matrix in Newton's Method}, thus omitting the calculation of $\bm{ The process of H}$. \textbf{Solving the incremental equation is at the heart of the overall optimization problem}. If we can solve the equation smoothly, the algorithmic steps of the Gauss-Newton method can be written as:
+
+\begin{mdframed}
+	\begin{enumerate}
+		\item gives the initial value $\bm{x}_0$.
+		\item For the $k$ iteration, find the current Jacobian matrix $\bm{J}(\bm{x}_k)$ and the error $f(\bm{x}_k)$.
+		\item solves the incremental equation: $\bm{H} \Delta \bm{x}_k = \bm{g}$.
+		\item Stop if $\Delta \bm{x}_k$ is small enough. Otherwise, let $\bm{x}_{k+1} = \bm{x}_k+\Delta \bm{x}_k$ return to step 2.
+	\end{enumerate}
+\end{mdframed}
+
+It can be seen from the algorithm steps that the solution of the incremental equation occupies a dominant position. As long as we can solve the increment smoothly, we can ensure that the objective function can drop correctly.
+
+To solve the incremental equation, we need to solve for $\bm{H}^{-1}$, which requires the $\bm{H}$ matrix to be reversible, but the $\bm{J} \bm{ calculated in the actual data. J}^\mathrm{T}$ is only semi-positive. That is to say, when using the Gauss-Newton method, it may appear that $\bm{J}\bm{J}^\mathrm{T}$ is a singular matrix or an ill-condition, and the increment is stable. Poor sex, resulting in the algorithm does not converge. Intuitively, the local approximation of the original function at this point is not like a quadratic function. More seriously, even if we assume that $\bm{H}$ is not singular, it is not morbid. If we find the step size $\Delta \bm{x}$ is too large, it will lead to the local approximation we use. Eqref{eq:approximation} is not accurate enough, so we can't even guarantee its iterative convergence, even if it makes the objective function bigger.
+
+Although the Gauss-Newton method has these shortcomings, it is still a simple and effective method for nonlinear optimization, which is worth learning.  In the field of nonlinear optimization, quite a few algorithms can be reduced to variants of the Gauss-Newton method.  These algorithms all rely on the idea of the Gauss-Newton method and correct its shortcomings through its own improvements.  For example, some \textbf{line search method} added a step size of $\alpha$, and after finding $\Delta \bm{x}$, further find $\alpha$ to make $\left\| f (\bm{x} + \alpha \Delta \bm{ x}) \right\|^2$ reaches the minimum, instead of simply making $\alpha = 1$.
+
+The Levenberg-Marquart method corrects these problems to some extent. It is generally considered to be more robust than the Gauss-Newton method, but its convergence rate may be slower than the Gauss-Newton method, known as the \textbf{damped Newton Method}.

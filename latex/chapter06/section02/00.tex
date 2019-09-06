@@ -1,0 +1,38 @@
+\section{nonlinear least squares}
+
+\label{sec:6.2}
+
+Let's consider a simple least squares problem first:
+
+\begin{equation}
+\mathop {\min }\limits_{\bm{x}} F(\bm{x}) = \frac{1}{2}{\left\| {f\left( \bm{x} \right)} \right\|^2_2}.
+\end{equation}
+
+Where the argument $\bm{x} \in \mathbb{R}^n$, $f$ is an arbitrary scalar nonlinear function $f(\bm{x}): \mathbb{R}^n \mapsto \ Mathbb{R}$. Note that the coefficient $\frac{1}{2}$ is irrelevant. Some documents have this coefficient, and some documents do not. It does not affect the subsequent conclusions. Let's discuss how to solve such an optimization problem. Obviously, if $f$ is a mathematically simple function, then the problem can be solved in analytical form. Let the derivative of the objective function be zero, and then solve the optimal value of $\bm{x}$, just like the extreme value of the binary function:
+
+\begin{equation}
+\frac{ \mathrm{d} F}{ \mathrm{d} \bm{x} } = \bm{0}.
+\end{equation}
+
+Solving this equation yields an extremum with a derivative of zero. They may be maximal, very small, or values at the saddle point, as long as they compare the size of their function values one by on. But is this equation easy to solve? This depends on the form of the $f$ derivative. If $f$ is a simple linear function, then the problem is a simple linear least squares problem, but some derivatives may be complex in form, making the equation not easy to solve. Solving this equation requires us to know the \textbf{global nature} of the objective function, which is usually not possible. For the least squares problem that is inconvenient to solve directly, we can use the \textbf{iteration} method to continuously update the current optimization variable from an initial value to make the objective function drop. The specific steps can be listed as follows:
+
+\begin{mdframed}  
+	\begin{enumerate}
+		\item gives an initial value of $\bm{x}_0$.
+		\item For the $k$ iteration, look for an increment of $\Delta \bm{x}_k$, making $\left\| {f\left( \bm{x}_k + \Delta \bm{x} _k \right)} \right \|^2_2$ reaches a minimum value.
+		\item Stop if $\Delta \bm{x}_k$ is small enough.
+		\item Otherwise, let $\bm{x}_{k+1} = \bm{x}_k+\Delta \bm{x}_k$ return to step 2.
+	\end{enumerate}
+\end{mdframed}
+
+This turns the problem of solving the \textbf{The derivative function is zero} The problem has become a constant \textbf{find drop increment} $\Delta \bm{x}_k$ problem, as we will see, since it can be $f$ Linearization, the calculation of the increment will be much simpler. When the function drops until the increment is very small, the algorithm is considered to converge and the objective function reaches a minimum value. In this process, the problem is how to find the increment of each iteration point, and this is a local problem, we only need to care about the local nature of $f$ at the iteration value rather than the global nature. Such methods are widely used in areas such as optimization and machine learning.
+	
+Next we look at how to find this increment $\Delta \bm{x}_k$. This part of the knowledge is actually in the field of numerical optimization, let's look at some widely used results.
+
+\input{chapter06/section02/01.tex}
+
+\input{chapter06/section02/02.tex}
+
+\input{chapter06/section02/03.tex}
+
+\input{chapter06/section02/04.tex}

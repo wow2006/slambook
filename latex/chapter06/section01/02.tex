@@ -1,0 +1,73 @@
+\subsection{Least squares lead}
+
+So how do you find the maximum likelihood estimate? We say that under the assumption of Gaussian distribution, the maximum likelihood can have a simpler form. Review the observation model for an observation:
+
+\[
+{\bm{z}_{k,j}} = h\left( {{ \bm{y}_j},{ \bm{x}_k}} \right)+ \bm{v}_{k, j},
+\]
+
+Since we assumed the noise term ${\bm{v}_k} \sim \mathcal{N}\left( {\bm{0},{{{\bm{Q}}}_{k,j}}} \right)$, so the conditional probability of the observed data is:
+
+\[
+P( \bm{z}_{j,k} | \bm{x}_k, \bm{y}_j ) = N\left( h(\bm{y}_j, \bm{x}_k), \bm{Q}_{k,j} \right).
+\]
+
+It is still a Gaussian distribution. Considering the maximum likelihood estimate for a single observation, you can use \textbf{minimize the negative logarithm} to find the maximum likelihood of a Gaussian distribution.
+
+We know that the Gaussian distribution has a good mathematical form under the negative logarithm. Consider any high-dimensional Gaussian distribution $\bm{x} \sim \mathcal{N}(\bm{\mu}, \bm{\Sigma})$, whose probability density function is expanded as:
+
+\begin{equation}
+P\left( \bm{x} \right) = \frac{1}{{\sqrt {{{(2\pi )}^N}\det ( \bm{\Sigma} )} }}\exp \left( { - \frac{1}{2}{{\left( { \bm{x} - \bm{\mu} } \right)}^\mathrm{T}}{ \bm{\Sigma} ^{ - 1}}\left( { \bm{x} - \bm{\mu} } \right)} \right).
+\end{equation}
+
+If you take a negative logarithm, it becomes:
+
+\begin{equation}
+- \ln \left( {P\left( \bm{x} \right)} \right) = \frac{1}{2}\ln \left( {{{\left( {2\pi } \right )}^N}\det \left( \bm{\Sigma} \right)} \right) + \frac{1}{2}{\left( { \bm{x} - \bm{\mu} } \right)^\mathrm{T}}{\bm{\Sigma} ^{ - 1}}\left( {\bm{x} - \bm{\mu} } \right).
+\end{equation}
+
+Since the logarithmic function is monotonically increasing, maximizing the original function is equivalent to minimizing the negative logarithm. When the $\bm{x}$ of the above formula is minimized, the first item has nothing to do with $\bm{x}$ and can be omitted. Thus, as long as the quadratic term on the right side is minimized, the maximum likelihood estimate for the state is obtained. Substituting the observation model of SLAM is equivalent to seeking:
+
+\begin{equation}
+\begin{aligned}
+(\bm{x}_k,\bm{y}_j)^* &= \arg \max \mathcal{N}(h(\bm{y}_j, \bm{x}_k), \bm{Q }_{k,j}) \\ &= \arg \min \left( {{{\left( {{ \bm{z}_{k,j}} - h\left( {{\bm{x }_k},{\bm{y}_j}} \right)} \right)}^\mathrm{T}} \bm{Q}_{k,j}^{ - 1}\left( {{\ Bm{z}_{k,j}} - h\left( {{\bm{x}_k},{\bm{y}_j}} \right)} \right)} \right).
+\end{aligned}
+\end{equation}
+
+We have found that this equation is equivalent to a quadratic form that minimizes the noise term (ie, the error). This quadratic type is called \textbf{Mahalanobis distance}, also called \textbf{Markov distance}. It can also be thought of as the Euclidean distance (two norms) weighted by $\bm{Q}_{k,j}^{-1}$, where $\bm{Q}_{k,j} ^{-1}$ is also called \textbf{information matrix}, which is the inverse of the Gaussian distribution covariance matrix.
+	
+Now let's consider the data for the batch time. It is usually assumed that the inputs and observations at each moment are independent of each other, which means that the inputs are independent, the observations are independent, and the inputs and observations are independent. So we can factor factor the joint distribution:
+
+\begin{equation}
+P\left( {\bm{z},\bm{u}|\bm{x},\bm{y}} \right) = \prod\limits_k {P\left( {{\bm{u}_k}|{\bm{x}_{k - 1}},{\bm{x}_k}} \right)} \prod\limits_{k,j} {P\left( {{\bm{z}_{k,j}}|{\bm{x}_k},{\bm{y}_j}} \right)},	
+\end{equation}
+
+This shows that we can handle motion and observation at all times independently. Define the error between each input and observation data and the model:
+
+\begin{equation}
+\begin{array}{l}
+{\bm{e}_{u,k}} = {\bm{x}_k} - f\left( {{\bm{x}_{k - 1}},{\bm{u}_k}} \right)\\
+{\bm{e}_{z,j,k}} = {\bm{z}_{k,j}} - h\left( {{\bm{x}_k},{\bm{y}_j}} \right),
+\end{array}
+\end{equation}
+
+Then, minimizing the Mahalanobis distance between all time estimates and real readings is equivalent to finding the maximum likelihood estimate. Negative logarithms allow us to turn the product into a sum:
+
+\begin{equation}
+\label{eq:least-square}
+\min J (\bm{x},\bm{y}) = \sum\limits_k {\bm{e}_{u,k}^\mathrm{T} \bm{R}_k^{ - 1}{ \bm{e}_{u,k}}}  + \sum\limits_k {\sum\limits_j {\bm{e}_{z,k,j}^\mathrm{T} \bm{Q}_{k,j}^{ - 1}{\bm{e}_{z,k,j}}} } .
+\end{equation}
+
+This gives a \textbf{Least Square Problem}, whose solution is equivalent to the maximum likelihood estimate of the state. Intuitively, due to the existence of noise, when we substitute the estimated trajectories and maps into the motion and observation equations of SLAM, they are not perfect. What should I do then? We perform \textbf{fine tuning} on the estimated state, which causes the overall error to drop. Of course, this decline is also limited, it will generally reach a \textbf {minimum value}. This is a typical nonlinear optimization process.
+
+Looking closely at \eqref{eq:least-square}, we find that the least squares problem in SLAM has some specific structure:
+
+\begin{itemize}
+	\item First, the objective function of the whole problem consists of a number of error (weighted) quadratic forms. Although the overall state variable has a high dimensionality, each error term is simple and is only related to one or two state variables. For example, the motion error is only related to $\bm{x}_{k-1}, \bm{x}_k$, and the observation error is only related to $\bm{x}_k, \bm{y}_j$. This relationship will make the whole problem have a form of \textbf{sparse}, which we will see in the backend chapter.
+	
+	\item Second, if you use Lie algebra to represent increments, the problem is the least squares problem of \textbf{unconstrained}. However, if the pose is described by the rotation matrix/transformation matrix, the constraint of the rotation matrix itself is introduced, that is, $\mathrm{st}\ \bm{R}^\mathrm{T} \bm{R} is added to the problem. =\bm{I} \text{and} \det (\bm{R})=1$ This is a big condition. Additional constraints make optimization more difficult. This reflects the advantages of Lie algebra.
+	
+	\item Finally, we used a quadratic metric error. The distribution of errors will affect the weight of this item throughout the problem. For example, if a certain observation is very accurate, then the covariance matrix will be "small" and the information matrix will be "large", so this error term will have a higher weight in the whole problem. We will see later that there are some problems, but we will not discuss them at present.
+\end{itemize}
+
+Now, we show how to solve this least squares problem, which requires some \textbf{the basic knowledge of nonlinear optimization}. In particular, we will explore how it is solved for such a general unconstrained nonlinear least squares problem. In the following lectures, we will use the results of this lecture extensively to discuss its application in the SLAM front-end and back-end.

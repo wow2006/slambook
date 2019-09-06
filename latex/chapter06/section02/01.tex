@@ -1,0 +1,40 @@
+\subsection{First-order and two-step methods}
+
+Now consider the $k$ iteration, assuming we are looking for the increment $\Delta \bm{x}_k$ at $\bm{x}_k$, then the most intuitive way is to put the target function at $ Taylor expansion near \bm{x}_k$:
+
+\begin{equation}
+F(\bm{x}_k+\Delta \bm{x}_k) \approx F{\left( \bm{x}_k \right)} + \bm{J} \left( \bm{x}_k \right) ^\mathrm{T} \Delta \bm{x}_k + \frac{1}{2}\Delta {\bm{x}_k^\mathrm{T}}\bm{H}(\bm{x}_k) \Delta \bm{x}_k.
+\end{equation}
+
+Where $\bm{J}(\bm{x}_k)$ is $F(\bm{x})$ for the first derivative of $\bm{x}$ (also called gradient, \textbf{Jacobi} Matrix [Jacobian]) \footnote{We write $\bm{J}(\bm{x})$ as a column vector, then it can be inner product with $\Delta \bm{x}$ to get a scalar. }, 
+$\bm{H}$ is the second derivative \textbf{Hessian matrix}, they all take values at $\bm{x}_k$, the reader should be in the university undergraduate multivariate calculus Learned in the course. We can choose to retain the first or second order of Taylor expansion, then the corresponding solution method is called a step or two step method.
+If you keep a step, then take the gradient in the inverse direction to ensure that the function drops:
+	
+\begin{equation}
+\Delta \bm{x}^* = - \bm{J}(\bm{x}_k).
+\end{equation}
+
+Of course this is just a direction, usually we have to specify another step $\lambda$. The step size can be calculated according to certain conditions \textsuperscript{\cite{Wolfe1969}}, and there are some empirical methods in machine learning, but we don't talk about it. This method is called \textbf{the steepest descent method}. Its intuitive meaning is very simple, as long as we move in the direction of the reverse gradient, the first-order (linear) approximation, the objective function must fall.
+
+Note that the above discussion was made at the $k$ iteration and does not involve other iteration information. So in order to simplify the symbol, we will omit the subscript $k$ later, and think that these discussions are true for any iteration.
+
+On the other hand, we can choose to retain the two-step information, where the incremental equation is:
+
+\begin{equation}
+\Delta \bm{x}^* = \arg \min \left(F\left( \bm{x} \right) + \bm{J} \left( \bm{x} \right)^\mathrm{ T} \Delta \bm{x} + \frac{1}{2}\Delta {\bm{x}^\mathrm{T}}\bm{H} \Delta \bm{x} \right).
+\end{equation}
+
+Only zero, one, and quadratic items of $\Delta \bm{x}$ are included on the right side. Find the derivative of the right-hand equation about $\Delta \bm{x}$ and make it zero. \footnote{For those who are unfamiliar with matrix derivation, please refer to Appendix B. },get:
+
+\begin{equation}
+\bm{J} + \bm{H} \Delta \bm{x} = \bm{0} \Rightarrow
+\bm{H} \Delta \bm{x} = -\bm{J}.
+\end{equation}
+
+Solving this linear equation yields an increment. This method is also known as \textbf{Newton method}.
+
+We see that both the first-order and two-step methods are straightforward, as long as the function is Taylor-expanded around the iteration point and minimized for updates.
+In fact, we approximate the original function with a one- or two-time function, and then use the minimum value of the approximation function to guess the minimum value of the original function.
+As long as the original objective function locally looks like a first or quadratic function, such an algorithm is true (this is also the case in reality). However, these two methods also have their own problems. The steepest descent method is too greedy, easy to get out of the jagged route, but increases the number of iterations.
+Newton's law needs to calculate the $\bm{H}$ matrix of the objective function, which is very difficult when the problem size is large.
+We usually tend to avoid the calculation of $\bm{H}$. For the general problem, some quasi-Newton methods can get better results, and for the least squares problem, there are several more practical methods: \textbf{Gauss-Newton's method} and \textbf{column Levernburg-Marquardt's method}.
